@@ -1,0 +1,7 @@
+{
+  "name": "BudJet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
