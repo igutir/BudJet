@@ -1,20 +1,60 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>BudJet App</ion-title>
+
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+        </ion-toolbar>
+    </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+    <div class="ion-padding">
+        <ion-list class="welcome-card">
+            <ion-item>
+                <h1>¡Bienvenido {{ data.username }}!</h1>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <ion-grid class="home-grid">
+        <ion-row>
+            <ion-col>
+                <h4 class=title-4>Movimientos</h4>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-button>Ingresar</ion-button>
+                <ion-button>Consultar</ion-button>
+            </ion-col>
+        </ion-row>
+        <br>
+        <ion-row>
+            <ion-col>
+                <h4 class=title-4>Cuentas</h4>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col><ion-button>Consultar</ion-button></ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+
 </ion-content>
+
+<ion-footer [translucent]="true">
+    <ion-toolbar>
+        <h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
+    </ion-toolbar>
+</ion-footer>

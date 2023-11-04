@@ -1,13 +1,43 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
+	<ion-toolbar>
+		
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+		</ion-buttons>
+
+		<ion-title>Skelleton APP</ion-title>
+
+	</ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">login</ion-title>
-    </ion-toolbar>
-  </ion-header>
+	<ion-header collapse="condense">
+		<ion-toolbar>
+			<ion-title size="large"></ion-title>
+		</ion-toolbar>
+	</ion-header>
+
+	<div class="login-input">
+		<ion-grid>
+			<ion-row class="ion-justify-content-center">
+				<ion-col size="auto">
+
+					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" [(ngModel)]="user.username"></ion-input>
+
+					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" value="password" [(ngModel)]="user.password"></ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+                <ion-button (click)="enviarDatos()">Ingresar</ion-button>
+			</ion-row>
+		</ion-grid>
+	</div>
+
 </ion-content>
+
+<ion-footer [translucent]="true">
+	<ion-toolbar>
+		<h5 class="copyright">© SkelletonAPP Todos los derechos reservados</h5>
+	</ion-toolbar>
+</ion-footer>

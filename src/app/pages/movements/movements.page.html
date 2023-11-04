@@ -1,13 +1,47 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>movements</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>BudJet App</ion-title>
+
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">movements</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <div class="ion-padding">
+        <ion-list class="welcome-card">
+            <ion-item>
+                <h1>Movimientos cuenta {{cuenta_consultada.nombre}}</h1>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <ion-list *ngFor="let movimiento of movimientos_cuenta" [inset]="true">
+        <ion-item ><!-- (click)="detalleMovimiento(movimiento.id)" -->
+            <ion-icon *ngIf="movimiento.esIngreso" color="primary" slot="start" name="add-circle-outline" size="large" ></ion-icon>
+            <ion-icon *ngIf="!movimiento.esIngreso" color="danger" slot="start" name="remove-circle-outline" size="large"></ion-icon>
+            <ion-label>{{movimiento.descripcion}}</ion-label>
+            <ion-label *ngIf="movimiento.esIngreso" slot="end">${{movimiento.monto}}</ion-label>
+            <ion-label *ngIf="!movimiento.esIngreso" slot="end"> - ${{movimiento.monto}}</ion-label>
+        </ion-item>
+    </ion-list>
+
+
+
 </ion-content>
+
+<ion-footer [translucent]="true">
+    <ion-toolbar>
+        <h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
+    </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,29 @@
+.welcome-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+h1 {
+    margin: 0px;
+}
+
+ion-label strong {
+    display: block;
+
+    max-width: calc(100% - 60px);
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+ion-label ion-note {
+    font-size: 0.9rem;
+}
+
+.copyright{
+    padding-left: 10px;
+}
