@@ -18,11 +18,12 @@ h1, h2 {
     align-items: center;
 }
 
-.profile-data-grid{
+.profile-card-container{
     display: flex;
     flex-direction: column;
-    max-width: 350px;
-    justify-content: flex-start;
+    max-width: 370px;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-img-container{

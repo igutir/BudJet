@@ -19,7 +19,6 @@ export class HomePage {
             else{
                 this.user = {
                     username: "Israel",
-                    password: "1234"
                 }
             }
         })

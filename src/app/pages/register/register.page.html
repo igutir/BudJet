@@ -21,18 +21,21 @@
 			<ion-row class="ion-justify-content-center">
 				<ion-col size="auto">
 
-					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" [(ngModel)]="user.username"></ion-input>
+					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" required [(ngModel)]="user.username"></ion-input>
 
-					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" value="password" [(ngModel)]="user.password"></ion-input>
+					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" value="password" required [(ngModel)]="user.password"></ion-input>
+
+                    <ion-input class="loginForm" label="Email: " labelPlacement="stacked" type="email" placeholder="usuario@budjet.cl" required [(ngModel)]="user.email"></ion-input>
+
+                    <ion-input class="loginForm" label="Telefono: " labelPlacement="stacked" type="tel" placeholder="912345678" required [(ngModel)]="user.telefono"></ion-input>
+
                 </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-center">
-                <ion-button (click)="enviarDatos()">Ingresar</ion-button>
-                <ion-button (click)="goToRegister()">Registrarse</ion-button>
+                <ion-button (click)="enviarDatos()">Registrarse</ion-button>
 			</ion-row>
             <br>
 		</ion-grid>
-
 	</ion-card>
 
 </ion-content>

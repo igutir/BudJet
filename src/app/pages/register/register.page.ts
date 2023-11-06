@@ -1,20 +1,21 @@
 import { AfterViewInit, Component, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { Animation, AnimationController, IonList } from  '@ionic/angular'
+import { Animation, AnimationController, IonList } from '@ionic/angular'
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.page.html',
-    styleUrls: ['./login.page.scss'],
+    selector: 'app-register',
+    templateUrl: './register.page.html',
+    styleUrls: ['./register.page.scss'],
 })
-export class LoginPage implements AfterViewInit {
-
+export class RegisterPage implements AfterViewInit {
     @ViewChild(IonList, {read: ElementRef}) titulo!: ElementRef<HTMLIonListElement>;
 
     user = {
         username: "",
-        password: ""
+        password: "",
+        email: "",
+        telefono: ""
     }
 
     private animation!: Animation;
@@ -59,15 +60,46 @@ export class LoginPage implements AfterViewInit {
         }
     }
 
+    validarEmail(texto: string) {
+
+        if (typeof texto !== "string") return false;
+
+        if (texto.replace(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, "") === "") {
+            return true;
+        }
+
+        else {
+            return false;
+        }
+    }
+
+    validarTelefono(numero: string){
+        if (typeof numero !== "string") return false;
+
+        if (numero.replace(/\d{9}/g, "") === "") {
+            return true;
+        }
+
+        else {
+            return false;
+        }
+    }
+
     validarCredenciales() {
         let validacion_usuario = false;
         let validacion_password = false;
+        let validacion_email = false;
+        let validacion_telefono = false;
 
         if (this.alfanumerico(this.user.username) && this.user.username.length >= 3 && this.user.username.length <= 8) validacion_usuario = true;
 
         if (this.numerico(this.user.password) && this.user.password.length === 4) validacion_password = true;
 
-        return (validacion_usuario && validacion_password);
+        if(this.validarEmail(this.user.email) && this.user.email.length > 0) validacion_email = true;
+
+        if (this.validarTelefono(this.user.telefono)) validacion_telefono = true;
+
+        return (validacion_usuario && validacion_password && validacion_email && validacion_telefono);
     }
 
     async enviarDatos() {
@@ -81,6 +113,14 @@ export class LoginPage implements AfterViewInit {
                     user: this.user
                 }
             }
+
+            const alert = await this.alertController.create({
+                header: 'Registro satisfactorio',
+                message: 'Su usuario fue correctamente registrado',
+                buttons: ['OK']
+            });
+
+            await alert.present();
 
             this.router.navigate(['/home'], navigationExtras);
         }
@@ -97,10 +137,6 @@ export class LoginPage implements AfterViewInit {
             await alert.present();
 
         }
-    }
-
-    goToRegister(){
-        this.router.navigate(['/register']);
     }
 
 }

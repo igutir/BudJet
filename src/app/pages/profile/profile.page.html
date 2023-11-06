@@ -38,26 +38,29 @@
         <h2>Datos:</h2>
     </ion-grid>
 
-    <ion-grid class="profile-data-grid">
+    <ion-card >
 
-        <ion-row>
-            <ion-col>Nombre de usuario: {{ user.username }}</ion-col>
-        </ion-row>
+        <ion-item>
+            <ion-label>Nombre de usuario: {{ user.username }}</ion-label>
+        </ion-item>
 
-        <ion-row>
-            <ion-col>Fecha de nacimiento: {{ user.fecha_nacimiento | date:'longDate':'':'es'}}</ion-col>
-        </ion-row>
+        <ion-item>
+            <ion-label>Fecha de nacimiento: {{ user.fecha_nacimiento | date:'longDate':'':'es'}}</ion-label>
+        </ion-item>
 
-        <ion-row>
-            <ion-col>Email: {{ user.email }}</ion-col>
-        </ion-row>
+        <ion-item>
+            <ion-label>Email: {{ user.email }}</ion-label>
+        </ion-item>
 
-        <ion-row>
-            <ion-col>Telefono: (+56) {{ user.telefono }}</ion-col>
-        </ion-row>
+        <ion-item>
+            <ion-label>Telefono: (+56) {{ user.telefono }}</ion-label>
+        </ion-item>
 
-    </ion-grid>
+        <ion-item>
+            <ion-toggle> Recibir notificaciones </ion-toggle>
+        </ion-item>
 
+    </ion-card>
 
 </ion-content>
 
