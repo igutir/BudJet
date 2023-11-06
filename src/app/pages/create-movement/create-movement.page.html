@@ -1,53 +1,91 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>create-movement</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>BudJet App</ion-title>
+
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">create-movement</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+        </ion-toolbar>
+    </ion-header>
 
+    <div class="ion-padding">
+        <ion-list class="welcome-card">
+            <ion-item>
+                <h1>Crear movimiento</h1>
+            </ion-item>
+        </ion-list>
+    </div>
 
- <!--  <div class="form-container">
-    <mat-form-field class="home-form">
-        <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Ingrese Nombre" [(ngModel)]="loggedUser.nombre">
-    </mat-form-field>
+    <ion-grid class="home-grid">
 
-    <mat-form-field class="home-form">
-        <mat-label>Apellido</mat-label>
-        <input matInput placeholder="Ingrese Apellido" [(ngModel)]="loggedUser.apellido">
-    </mat-form-field>
-
-    <mat-form-field class="home-form">
-        <mat-label>Nivel educacional: </mat-label>
-        <mat-select>
-            <mat-option *ngFor="let nivel of nivel_educacional" [value]="nivel" (click)="setNivelEd(nivel)">
-                {{ nivel }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <mat-form-field class="home-form">
-        <mat-label>Fecha nacimiento</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="loggedUser.fecha_nacimiento">
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-</div>
-<mat-divider></mat-divider> 
-
-    <ion-grid class="button-grid">
         <ion-row>
-            <ion-button>Limpiar</ion-button>
-            <ion-button type="reset">Mostrar</ion-button>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Cuenta</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let cuenta of cuentas_usuario" [value]="cuenta.id"
+                            (click)="setCuenta(cuenta)">
+                            {{cuenta.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ion-col>
         </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Tipo de movimiento</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let tipo of tipos_movimiento" [value]="tipo.id" (click)="SetTipo(tipo)">
+                            {{tipo.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Monto</mat-label>
+                    <input matInput type="number" min="0" [(ngModel)]="nuevo_movimiento.monto">
+                    <span matTextPrefix>$</span>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Descripción</mat-label>
+                    <input matInput type="text" [(ngModel)]="nuevo_movimiento.descripcion">
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <ion-button (click)="ingresoExitoso()">Ingresar movimiento</ion-button>
+            </ion-col>
+        </ion-row>
+
     </ion-grid>
--->
 
 </ion-content>
+
+<ion-footer [translucent]="true">
+    <ion-toolbar>
+        <h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
+    </ion-toolbar>
+</ion-footer>

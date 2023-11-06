@@ -8,12 +8,26 @@ import { CreateMovementPageRoutingModule } from './create-movement-routing.modul
 
 import { CreateMovementPage } from './create-movement.page';
 
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
+import { NgFor } from '@angular/common';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CreateMovementPageRoutingModule
+    CreateMovementPageRoutingModule,
+    MatSelectModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatButtonModule,
+    NgFor
   ],
   declarations: [CreateMovementPage]
 })

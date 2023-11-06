@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { Cuenta } from '../interfaces/cuenta';
+import { registerLocaleData } from '@angular/common';
+import es from '@angular/common/locales/es';
 
 @Component({
     selector: 'app-accounts',
@@ -8,23 +11,28 @@ import { NavigationExtras, Router } from '@angular/router';
 })
 export class AccountsPage implements OnInit {
 
-    cuenta1 = {
-        id: 1,
-        nombre: "Personal",
-        saldo: 500000
-    }
-
-    cuenta2 = {
-        id: 2,
-        nombre: "Ahorro",
-        saldo: 1500000
-    }
-
-    cuentas_registradas: any[] = [this.cuenta1, this.cuenta2];
+    cuentas_registradas: Cuenta[] = [
+        {
+            id: 1,
+            id_user: 1,
+            nombre: "Personal",
+            saldo: 1400000,
+            fecha_creacion: new Date(2020, 5, 19),
+            fecha_actualizacion: new Date()
+        }, {
+            id: 2,
+            id_user: 1,
+            nombre: "Ahorro",
+            saldo: 450000,
+            fecha_creacion: new Date(2020, 12, 5),
+            fecha_actualizacion: new Date()
+        }
+    ];
 
     constructor(private router: Router) { }
 
     ngOnInit() {
+        registerLocaleData( es );
     }
 
     seleccionarCuenta(id_cuenta: number) {
@@ -44,6 +52,11 @@ export class AccountsPage implements OnInit {
         }
 
         this.router.navigate(['/movements'], navigationExtras);
+    }
+
+    goToCreateAccounts() {
+
+        this.router.navigate(['/create-account']);
     }
 
 }

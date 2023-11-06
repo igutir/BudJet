@@ -21,22 +21,42 @@
     <div class="ion-padding">
         <ion-list class="welcome-card">
             <ion-item>
-                <h1>Movimientos cuenta {{cuenta_consultada.nombre}}</h1>
+                <h1>Movimientos cuenta: {{cuenta_consultada.nombre}}</h1>
             </ion-item>
         </ion-list>
     </div>
 
-    <ion-list *ngFor="let movimiento of movimientos_cuenta" [inset]="true">
-        <ion-item ><!-- (click)="detalleMovimiento(movimiento.id)" -->
-            <ion-icon *ngIf="movimiento.esIngreso" color="primary" slot="start" name="add-circle-outline" size="large" ></ion-icon>
-            <ion-icon *ngIf="!movimiento.esIngreso" color="danger" slot="start" name="remove-circle-outline" size="large"></ion-icon>
-            <ion-label>{{movimiento.descripcion}}</ion-label>
-            <ion-label *ngIf="movimiento.esIngreso" slot="end">${{movimiento.monto}}</ion-label>
-            <ion-label *ngIf="!movimiento.esIngreso" slot="end"> - ${{movimiento.monto}}</ion-label>
-        </ion-item>
-    </ion-list>
+    <div *ngIf="cuenta_consultada.id === 1">
+        <ion-list *ngFor="let movimiento of movimientos_cuenta_1" [inset]="true">
+            <ion-item>
+                <ion-icon *ngIf="movimiento.tipo_movimiento === 1" color="success" slot="start"
+                    name="add-circle-outline" size="large"></ion-icon>
+                <ion-icon *ngIf="movimiento.tipo_movimiento === 2" color="danger" slot="start"
+                    name="remove-circle-outline" size="large"></ion-icon>
+                <ion-label>{{movimiento.descripcion}}</ion-label>
+                <ion-label *ngIf="movimiento.tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
+                    number:'1.0-0':'es'}}</ion-label>
+                <ion-label *ngIf="movimiento.tipo_movimiento === 2" slot="end"> - $ {{movimiento.monto |
+                    number:'1.0-0':'es'}}</ion-label>
+            </ion-item>
+        </ion-list>
+    </div>
 
-
+    <div *ngIf="cuenta_consultada.id === 2">
+        <ion-list *ngFor="let movimiento of movimientos_cuenta_2" [inset]="true">
+            <ion-item>
+                <ion-icon *ngIf="movimiento.tipo_movimiento === 1" color="success" slot="start"
+                    name="add-circle-outline" size="large"></ion-icon>
+                <ion-icon *ngIf="movimiento.tipo_movimiento === 2" color="danger" slot="start"
+                    name="remove-circle-outline" size="large"></ion-icon>
+                <ion-label>{{movimiento.descripcion}}</ion-label>
+                <ion-label *ngIf="movimiento.tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
+                    number:'1.0-0':'es'}}</ion-label>
+                <ion-label *ngIf="movimiento.tipo_movimiento === 2" slot="end"> - $ {{movimiento.monto |
+                    number:'1.0-0':'es'}}</ion-label>
+            </ion-item>
+        </ion-list>
+    </div>
 
 </ion-content>
 

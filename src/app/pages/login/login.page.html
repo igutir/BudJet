@@ -1,14 +1,4 @@
 <ion-header [translucent]="true">
-	<ion-toolbar>
-		
-		<ion-buttons slot="start">
-			<ion-menu-button></ion-menu-button>
-            <ion-back-button></ion-back-button>
-		</ion-buttons>
-
-		<ion-title>Skelleton APP</ion-title>
-
-	</ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -17,6 +7,14 @@
 			<ion-title size="large"></ion-title>
 		</ion-toolbar>
 	</ion-header>
+
+    <div class="ion-padding">
+        <ion-list class="welcome-card" #titulo>
+            <ion-item>
+                <h1>BudJet App</h1>
+            </ion-item>
+        </ion-list>
+    </div>
 
 	<div class="login-input">
 		<ion-grid>
@@ -38,6 +36,6 @@
 
 <ion-footer [translucent]="true">
 	<ion-toolbar>
-		<h5 class="copyright">© SkelletonAPP Todos los derechos reservados</h5>
+		<h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
 	</ion-toolbar>
 </ion-footer>

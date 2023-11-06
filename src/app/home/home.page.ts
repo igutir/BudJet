@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 @Component({
@@ -9,23 +9,47 @@ import { AlertController } from '@ionic/angular';
 })
 export class HomePage {
 
-    data: any;
-
-    loggedUser = {
-        nombre: "",
-        apellido: ""
-    }
+    user: any;
 
     constructor(private activeRouter: ActivatedRoute, private router: Router, public alertController: AlertController) {
-        this.activeRouter.queryParams.subscribe(params =>{
-            if(this.router.getCurrentNavigation()?.extras?.state){
-                this.data = this.router.getCurrentNavigation()?.extras?.state?.['user'];
-
+        this.activeRouter.queryParams.subscribe(params => {
+            if (this.router.getCurrentNavigation()?.extras?.state) {
+                this.user = this.router.getCurrentNavigation()?.extras?.state?.['user'];
             }
             else{
-                this.router.navigate(["/login"])
+                this.user = {
+                    username: "Israel",
+                    password: "1234"
+                }
             }
         })
+    }
+
+    goToAccounts() {
+
+        let navigationExtras: NavigationExtras = {
+            state: {
+                user: this.user
+            }
+        }
+
+        this.router.navigate(['/accounts'], navigationExtras);
+    }
+
+    goToCreateMovements() {
+
+        let navigationExtras: NavigationExtras = {
+            state: {
+                user: this.user
+            }
+        }
+
+        this.router.navigate(['/create-movement'], navigationExtras);
+    }
+
+    goToCreateAccounts() {
+
+        this.router.navigate(['/create-account']);
     }
 
 }

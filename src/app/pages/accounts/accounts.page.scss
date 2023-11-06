@@ -10,6 +10,14 @@ h1 {
     margin: 0px;
 }
 
+.home-grid{
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+    justify-content: center;
+    align-items: center;
+}
+
 ion-label strong {
     display: block;
 

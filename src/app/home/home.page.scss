@@ -12,7 +12,9 @@ h1 {
 }
 
 .home-grid{
-    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
     justify-content: center;
     align-items: center;
 }

@@ -21,43 +21,39 @@
     <div class="ion-padding">
         <ion-list class="welcome-card">
             <ion-item>
-                <h1>Perfil</h1>
+                <h1>Crear cuenta</h1>
             </ion-item>
         </ion-list>
     </div>
 
-    <ion-grid class="profile-header-grid">
+    <ion-grid class="home-grid">
 
         <ion-row>
-            <div class="profile-img-container">
-                <ion-img class="profile-img" src="/assets/img/default_profile_img.png"></ion-img>
-            </div>
-
-        </ion-row>
-        <br>
-        <h2>Datos:</h2>
-    </ion-grid>
-
-    <ion-grid class="profile-data-grid">
-
-        <ion-row>
-            <ion-col>Nombre de usuario: {{ user.username }}</ion-col>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Nombre de la cuenta</mat-label>
+                    <input matInput type="text" required [(ngModel)]="nueva_cuenta.nombre">
+                </mat-form-field>
+            </ion-col>
         </ion-row>
 
         <ion-row>
-            <ion-col>Fecha de nacimiento: {{ user.fecha_nacimiento | date:'longDate':'':'es'}}</ion-col>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Saldo inicial</mat-label>
+                    <input matInput type="number" placeholder="0" min="0" [(ngModel)]="nueva_cuenta.saldo">
+                    <span matTextPrefix>$</span>
+                </mat-form-field>
+            </ion-col>
         </ion-row>
 
         <ion-row>
-            <ion-col>Email: {{ user.email }}</ion-col>
-        </ion-row>
-
-        <ion-row>
-            <ion-col>Telefono: (+56) {{ user.telefono }}</ion-col>
+            <ion-col>
+                <ion-button (click)="ingresoExitoso()">Ingresar cuenta</ion-button>
+            </ion-col>
         </ion-row>
 
     </ion-grid>
-
 
 </ion-content>
 

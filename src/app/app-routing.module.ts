@@ -32,6 +32,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
   },
   {
+    path: 'create-account',
+    loadChildren: () => import('./pages/create-account/create-account.module').then( m => m.CreateAccountPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
   },

@@ -1,0 +1,48 @@
+.welcome-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+h1, h2 {
+    margin: 0px;
+}
+
+.profile-header-grid{
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-data-grid{
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+    justify-content: flex-start;
+}
+
+.profile-img-container{
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.profile-img{
+    width: 150px;
+    height: 150px;
+    padding: 0px;
+    background-color: white;
+    border: 2px solid #fcc23f;
+    border-radius: 5px;
+}
+
+.copyright{
+    padding-left: 10px;
+}

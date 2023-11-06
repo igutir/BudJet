@@ -30,11 +30,15 @@
         <ion-item [button]="true" (click)="seleccionarCuenta(cuenta.id)">
             <ion-icon color="tertiary" slot="start" name="card-outline" size="large"></ion-icon>
             <ion-label>{{cuenta.nombre}}</ion-label>
-            <ion-label slot="end">${{cuenta.saldo}}</ion-label>
+            <ion-label slot="end">${{cuenta.saldo | number:'1.0-0':'es'}}</ion-label>
         </ion-item>
     </ion-list>
 
-
+    <ion-grid  class="home-grid">
+        <ion-row>
+            <ion-col><ion-button (click)="goToCreateAccounts()">Crear cuenta</ion-button></ion-col>
+        </ion-row>
+    </ion-grid>
 
 </ion-content>
 
