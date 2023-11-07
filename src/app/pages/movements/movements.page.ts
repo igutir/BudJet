@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Cuenta } from '../interfaces/cuenta';
 import { Movimiento } from '../interfaces/movimiento';
-import { TipoMovimiento } from '../interfaces/tipo_movimiento';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 
@@ -91,6 +90,4 @@ export class MovementsPage implements OnInit {
     ngOnInit() {
         registerLocaleData( es );
     }
-
-
 }

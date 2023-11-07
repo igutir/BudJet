@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ViewChildren, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { Animation, AnimationController, IonList } from  '@ionic/angular'
+import type { Animation } from  '@ionic/angular'
+import { AnimationController, IonList } from  '@ionic/angular'
 
 @Component({
     selector: 'app-login',
