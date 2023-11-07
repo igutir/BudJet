@@ -32,7 +32,7 @@ validarIngreso() {
         nombre_ok = true;
     }
     else{
-        if(!(this.nueva_cuenta.nombre.length > 0)) console.log("nombre vacia");
+        if(!(this.nueva_cuenta.nombre.length > 0)) console.log("nombre vacio");
     }
     return nombre_ok;
 }
