@@ -17,7 +17,7 @@ export class MovementsPage implements OnInit {
         id: 0,
         id_user: 0,
         nombre: "",
-        saldo: 0,
+        saldo: "",
         fecha_creacion: new Date(),
         fecha_actualizacion: new Date()
     }
@@ -27,7 +27,7 @@ export class MovementsPage implements OnInit {
             id: 1,
             id_cuenta: 1,
             descripcion: "Sueldo",
-            monto: 1500000,
+            monto: "1500000",
             fecha: new Date(),
             tipo_movimiento: 1
         },
@@ -35,7 +35,7 @@ export class MovementsPage implements OnInit {
             id: 2,
             id_cuenta: 1,
             descripcion: "Compra supermercado",
-            monto: 100000,
+            monto: "100000",
             fecha: new Date(),
             tipo_movimiento: 2
         }
@@ -46,7 +46,7 @@ export class MovementsPage implements OnInit {
             id: 3,
             id_cuenta: 1,
             descripcion: "Ahorro casa",
-            monto: 520000,
+            monto: "520000",
             fecha: new Date(),
             tipo_movimiento: 1
         },
@@ -54,7 +54,7 @@ export class MovementsPage implements OnInit {
             id: 4,
             id_cuenta: 1,
             descripcion: "Emergencia",
-            monto: 70000,
+            monto: "70000",
             fecha: new Date(),
             tipo_movimiento: 2
         }
@@ -64,7 +64,7 @@ export class MovementsPage implements OnInit {
         id: 3,
         id_cuenta: 0,
         descripcion: "Compra supermercado",
-        monto: 100000,
+        monto: "100000",
         fecha: new Date(),
         tipo_movimiento: 2
     }
@@ -79,7 +79,7 @@ export class MovementsPage implements OnInit {
                     id: 1,
                     id_user: 1,
                     nombre: "Personal",
-                    saldo: 500000,
+                    saldo: "500000",
                     fecha_creacion: new Date(),
                     fecha_actualizacion: new Date()
                 }
