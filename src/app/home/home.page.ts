@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { Usuario } from '../pages/interfaces/usuario';
 
 @Component({
     selector: 'app-home',
@@ -9,17 +9,21 @@ import { AlertController } from '@ionic/angular';
 })
 export class HomePage {
 
-    user: any;
+    usuario: Usuario = {
+        id: 0,
+        nombre: "",
+        password: "",
+        email: "",
+        telefono: "",
+        fecha_nacimiento: new Date(),
+        imagen_perfil: "",
+        notificaciones: false
+    };
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, public alertController: AlertController) {
+    constructor(private activeRouter: ActivatedRoute, private router: Router) {
         this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.user = this.router.getCurrentNavigation()?.extras?.state?.['user'];
-            }
-            else{
-                this.user = {
-                    username: "Israel",
-                }
+                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
             }
         })
     }
@@ -28,7 +32,7 @@ export class HomePage {
 
         let navigationExtras: NavigationExtras = {
             state: {
-                user: this.user
+                usuario: this.usuario
             }
         }
 
@@ -39,7 +43,7 @@ export class HomePage {
 
         let navigationExtras: NavigationExtras = {
             state: {
-                user: this.user
+                usuario: this.usuario
             }
         }
 

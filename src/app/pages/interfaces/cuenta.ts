@@ -4,5 +4,5 @@ export interface Cuenta {
     saldo: string;
     fecha_creacion: Date;
     fecha_actualizacion: Date;
-    id_user: number;
+    id_usuario: number;
 }

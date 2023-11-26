@@ -33,8 +33,8 @@
                 <mat-form-field>
                     <mat-label>Cuenta</mat-label>
                     <mat-select>
-                        <mat-option *ngFor="let cuenta of cuentas_usuario" [value]="cuenta.id"
-                            (click)="setCuenta(cuenta)">
+                        <mat-option *ngFor="let cuenta of arreglo_cuentas" [value]="cuenta.id"
+                            (click)="setCuenta(cuenta.id)">
                             {{cuenta.nombre}}
                         </mat-option>
                     </mat-select>
@@ -47,7 +47,7 @@
                 <mat-form-field>
                     <mat-label>Tipo de movimiento</mat-label>
                     <mat-select>
-                        <mat-option *ngFor="let tipo of tipos_movimiento" [value]="tipo.id" (click)="SetTipo(tipo)">
+                        <mat-option *ngFor="let tipo of tipos_movimiento" [value]="tipo.id" (click)="setTipoCuenta(tipo.id)">
                             {{tipo.nombre}}
                         </mat-option>
                     </mat-select>

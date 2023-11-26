@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
+import { OnInit, AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import type { Animation } from  '@ionic/angular'
 import { AnimationController, IonList } from  '@ionic/angular'
+import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
+import { Usuario } from '../interfaces/usuario';
 
 @Component({
     selector: 'app-login',
@@ -13,16 +14,44 @@ export class LoginPage implements AfterViewInit {
 
     @ViewChild(IonList, {read: ElementRef}) titulo!: ElementRef<HTMLIonListElement>;
 
-    user = {
-        username: "",
-        password: ""
+    usuariosRegistrados: Usuario[] = [
+        {
+            id: 0,
+            nombre: "",
+            password: "",
+            email: "",
+            telefono: "",
+            fecha_nacimiento: new Date(),
+            imagen_perfil: "",
+            notificaciones: false
+        }
+    ]
+
+    usuarioActual: Usuario = {
+        id: 0,
+        nombre: "",
+        password: "",
+        email: "",
+        telefono: "",
+        fecha_nacimiento: new Date(),
+        imagen_perfil: "",
+        notificaciones: false
     }
 
     private animation!: Animation;
 
-    constructor(private router: Router, public alertController: AlertController, private animationCtrl: AnimationController) { }
+    constructor(private router: Router, private animationCtrl: AnimationController, private DBService: DataBaseServiceService) { }
 
     ngAfterViewInit() {
+
+        this.DBService.dbState().subscribe(res => {
+            if(res){
+                this.DBService.fetchUsuarios().subscribe(item => {
+                    this.usuariosRegistrados = item;
+                })
+            }
+        })
+
         this.animation = this.animationCtrl
             .create()
             .addElement(this.titulo.nativeElement)
@@ -64,39 +93,53 @@ export class LoginPage implements AfterViewInit {
         let validacion_usuario = false;
         let validacion_password = false;
 
-        if (this.alfanumerico(this.user.username) && this.user.username.length >= 3 && this.user.username.length <= 8) validacion_usuario = true;
+        if (this.alfanumerico(this.usuarioActual.nombre) && this.usuarioActual.nombre.length >= 3 && this.usuarioActual.nombre.length <= 8) validacion_usuario = true;
 
-        if (this.numerico(this.user.password) && this.user.password.length === 4) validacion_password = true;
+        if (this.numerico(this.usuarioActual.password) && this.usuarioActual.password.length === 4) validacion_password = true;
 
-        return (validacion_usuario && validacion_password);
+        if (validacion_usuario && validacion_password){
+            return true;
+
+        }
+        else{
+            this.DBService.presentAlert('Credenciales inválidas');
+            return false;
+        }
     }
 
-    async enviarDatos() {
 
-        if (this.validarCredenciales()) {
+    validarUsuario(){
+        for(let i=0; i< this.usuariosRegistrados.length; i++){
+            if(this.usuariosRegistrados[i].nombre === this.usuarioActual.nombre){
+                if(this.usuariosRegistrados[i].password === this.usuarioActual.password){
+                    this.usuarioActual.id = this.usuariosRegistrados[i].id
+                    return true;
+                }
+                else{
+                    this.DBService.presentAlert('Contraseña incorrecta');
+                }
+            }
+        }
+        this.DBService.presentAlert('Usuario no encontrado');
 
-            console.log("validacion credenciales ok")
+        return false;
+    }
+
+    enviarDatos() {
+
+        if (this.validarCredenciales() && this.validarUsuario()) {
+
+            console.log("validacion credenciales ok");
+
+            this.DBService.presentToast('Login exitoso');
 
             let navigationExtras: NavigationExtras = {
                 state: {
-                    user: this.user
+                    usuario: this.usuarioActual
                 }
             }
 
             this.router.navigate(['/home'], navigationExtras);
-        }
-
-        else {
-            console.log("Credenciales invalidas");
-
-            const alert = await this.alertController.create({
-                header: 'Error',
-                message: 'Las credenciales ingresadas no son correctas',
-                buttons: ['OK']
-            });
-
-            await alert.present();
-
         }
     }
 

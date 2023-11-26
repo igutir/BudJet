@@ -43,6 +43,22 @@ const routes: Routes = [
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
   },
+  {
+    path: 'update-movement',
+    loadChildren: () => import('./pages/update-movement/update-movement.module').then( m => m.UpdateMovementPageModule)
+  },
+  {
+    path: 'update-account',
+    loadChildren: () => import('./pages/update-account/update-account.module').then( m => m.UpdateAccountPageModule)
+  },
+  {
+    path: 'delete-movement',
+    loadChildren: () => import('./pages/delete-movement/delete-movement.module').then( m => m.DeleteMovementPageModule)
+  },
+  {
+    path: 'delete-account',
+    loadChildren: () => import('./pages/delete-account/delete-account.module').then( m => m.DeleteAccountPageModule)
+  },
 
 ];
 

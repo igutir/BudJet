@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
+import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
+import { Usuario } from '../interfaces/usuario';
 
 @Component({
     selector: 'app-create-account',
@@ -10,16 +11,33 @@ import { Cuenta } from '../interfaces/cuenta';
 })
 export class CreateAccountPage implements OnInit {
 
-    nueva_cuenta: Cuenta = {
-        id: 3,
-        id_user: 1,
+    usuario: Usuario = {
+        id: 0,
         nombre: "",
-        saldo: 0,
+        password: "",
+        email: "",
+        telefono: "",
+        fecha_nacimiento: new Date(),
+        imagen_perfil: "",
+        notificaciones: false
+    };
+
+    nueva_cuenta: Cuenta = {
+        id: 0,
+        nombre: "",
+        saldo: "",
         fecha_creacion: new Date(),
-        fecha_actualizacion: new Date()
+        fecha_actualizacion: new Date(),
+        id_usuario: 0,
     }
 
-constructor(private router: Router, public alertController: AlertController) { }
+constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+    this.activeRouter.queryParams.subscribe(params => {
+        if (this.router.getCurrentNavigation()?.extras?.state) {
+            this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
+        }
+    })
+}
 
 ngOnInit() {
 }
@@ -37,34 +55,38 @@ validarIngreso() {
     return nombre_ok;
 }
 
-async ingresoExitoso() {
+ingresoExitoso() {
     if (this.validarIngreso()) {
 
-        const alert = await this.alertController.create({
-            header: 'Ingreso exitoso',
-            message: 'Cuenta registrada exitosamente',
-            buttons: ['OK']
-        });
+        this.DBService.presentToast('Cuenta registrada exitosamente');
 
-        await alert.present();
+        this.DBService.insertCuenta(
+            this.nueva_cuenta.nombre,
+            this.nueva_cuenta.saldo,
+            new Date(),
+            new Date(),
+            this.usuario.id,
+        );
 
         this.goAccounts();
     }
 
     else {
-        const alert = await this.alertController.create({
-            header: 'Error',
-            message: 'El nombre no puede estar vacío',
-            buttons: ['OK']
-        });
 
-        await alert.present();
+        this.DBService.presentToast('El nombre no puede estar vacío');
+
     }
 }
 
 goAccounts() {
 
-    this.router.navigate(['/accounts']);
+    let navigationExtras: NavigationExtras = {
+        state: {
+            usuario: this.usuario
+        }
+    }
+
+    this.router.navigate(['/accounts'], navigationExtras);
 
 }
 

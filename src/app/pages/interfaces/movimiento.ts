@@ -4,5 +4,5 @@ export interface Movimiento {
     monto: string;
     fecha: Date;
     id_cuenta: number;
-    tipo_movimiento: number;
+    id_tipo_movimiento: number;
 }

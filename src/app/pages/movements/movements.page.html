@@ -26,33 +26,17 @@
         </ion-list>
     </div>
 
-    <div *ngIf="cuenta_consultada.id === 1">
-        <ion-list *ngFor="let movimiento of movimientos_cuenta_1" [inset]="true">
+    <div>
+        <ion-list *ngFor="let movimiento of arreglo_movimientos" [inset]="true">
             <ion-item>
-                <ion-icon *ngIf="movimiento.tipo_movimiento === 1" color="success" slot="start"
+                <ion-icon *ngIf="movimiento.id_tipo_movimiento === 1" color="success" slot="start"
                     name="add-circle-outline" size="large"></ion-icon>
-                <ion-icon *ngIf="movimiento.tipo_movimiento === 2" color="danger" slot="start"
+                <ion-icon *ngIf="movimiento.id_tipo_movimiento === 2" color="danger" slot="start"
                     name="remove-circle-outline" size="large"></ion-icon>
                 <ion-label>{{movimiento.descripcion}}</ion-label>
-                <ion-label *ngIf="movimiento.tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
+                <ion-label *ngIf="movimiento.id_tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
                     number:'1.0-0':'es'}}</ion-label>
-                <ion-label *ngIf="movimiento.tipo_movimiento === 2" slot="end"> - $ {{movimiento.monto |
-                    number:'1.0-0':'es'}}</ion-label>
-            </ion-item>
-        </ion-list>
-    </div>
-
-    <div *ngIf="cuenta_consultada.id === 2">
-        <ion-list *ngFor="let movimiento of movimientos_cuenta_2" [inset]="true">
-            <ion-item>
-                <ion-icon *ngIf="movimiento.tipo_movimiento === 1" color="success" slot="start"
-                    name="add-circle-outline" size="large"></ion-icon>
-                <ion-icon *ngIf="movimiento.tipo_movimiento === 2" color="danger" slot="start"
-                    name="remove-circle-outline" size="large"></ion-icon>
-                <ion-label>{{movimiento.descripcion}}</ion-label>
-                <ion-label *ngIf="movimiento.tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
-                    number:'1.0-0':'es'}}</ion-label>
-                <ion-label *ngIf="movimiento.tipo_movimiento === 2" slot="end"> - $ {{movimiento.monto |
+                <ion-label *ngIf="movimiento.id_tipo_movimiento === 2" slot="end"> - $ {{movimiento.monto |
                     number:'1.0-0':'es'}}</ion-label>
             </ion-item>
         </ion-list>
