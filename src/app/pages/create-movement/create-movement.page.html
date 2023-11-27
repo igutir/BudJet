@@ -34,7 +34,7 @@
                     <mat-label>Cuenta</mat-label>
                     <mat-select>
                         <mat-option *ngFor="let cuenta of arreglo_cuentas" [value]="cuenta.id"
-                            (click)="setCuenta(cuenta.id)">
+                            (click)="setCuenta(cuenta)">
                             {{cuenta.nombre}}
                         </mat-option>
                     </mat-select>
@@ -47,8 +47,8 @@
                 <mat-form-field>
                     <mat-label>Tipo de movimiento</mat-label>
                     <mat-select>
-                        <mat-option *ngFor="let tipo of tipos_movimiento" [value]="tipo.id" (click)="setTipoCuenta(tipo.id)">
-                            {{tipo.nombre}}
+                        <mat-option *ngFor="let tipo of tipos_movimiento" [value]="tipo.id" (click)="setTipoCuenta(tipo)">
+                            {{tipo.descripcion}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -59,7 +59,7 @@
             <ion-col>
                 <mat-form-field>
                     <mat-label>Monto</mat-label>
-                    <input matInput type="number" min="0" [(ngModel)]="nuevo_movimiento.monto">
+                    <input matInput type="number" min="0" [(ngModel)]="monto">
                     <span matTextPrefix>$</span>
                 </mat-form-field>
             </ion-col>
@@ -69,7 +69,7 @@
             <ion-col>
                 <mat-form-field>
                     <mat-label>Descripción</mat-label>
-                    <input matInput type="text" [(ngModel)]="nuevo_movimiento.descripcion">
+                    <input matInput type="text" [(ngModel)]="descripcion">
                 </mat-form-field>
             </ion-col>
         </ion-row>

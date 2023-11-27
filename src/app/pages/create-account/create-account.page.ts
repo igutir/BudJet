@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
-import { Usuario } from '../interfaces/usuario';
 
 @Component({
     selector: 'app-create-account',
@@ -11,15 +10,9 @@ import { Usuario } from '../interfaces/usuario';
 })
 export class CreateAccountPage implements OnInit {
 
-    usuario: Usuario = {
+    usuario: any = {
         id: 0,
         nombre: "",
-        password: "",
-        email: "",
-        telefono: "",
-        fecha_nacimiento: new Date(),
-        imagen_perfil: "",
-        notificaciones: false
     };
 
     nueva_cuenta: Cuenta = {
@@ -50,15 +43,13 @@ validarIngreso() {
         nombre_ok = true;
     }
     else{
-        if(!(this.nueva_cuenta.nombre.length > 0)) console.log("nombre vacio");
+        if(!(this.nueva_cuenta.nombre.length > 0)) this.DBService.presentToast('Nombre vacío');
     }
     return nombre_ok;
 }
 
 ingresoExitoso() {
     if (this.validarIngreso()) {
-
-        this.DBService.presentToast('Cuenta registrada exitosamente');
 
         this.DBService.insertCuenta(
             this.nueva_cuenta.nombre,
@@ -67,6 +58,8 @@ ingresoExitoso() {
             new Date(),
             this.usuario.id,
         );
+
+        this.DBService.presentToast('Cuenta registrada exitosamente');
 
         this.goAccounts();
     }

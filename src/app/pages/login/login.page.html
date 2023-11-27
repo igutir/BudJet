@@ -34,13 +34,16 @@
 
 					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" [(ngModel)]="usuarioActual.nombre"></ion-input>
 
-					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" value="password" [(ngModel)]="usuarioActual.password"></ion-input>
+					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" value="password" [(ngModel)]="password"></ion-input>
                 </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-center">
                 <ion-button (click)="enviarDatos()">Ingresar</ion-button>
                 <ion-button (click)="goToRegister()">Registrarse</ion-button>
 			</ion-row>
+            <ion-row class="ion-justify-content-center">
+                <ion-button (click)="goToApi()">Api Rest</ion-button>
+            </ion-row>
             <br>
 		</ion-grid>
 

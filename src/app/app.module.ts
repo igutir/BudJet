@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ComponentsModule } from './components/components.module';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +19,8 @@ import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
     IonicModule.forRoot(),
     AppRoutingModule,
     BrowserAnimationsModule,
-    ComponentsModule
+    ComponentsModule,
+    HttpClientModule
 ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, SQLite],
   bootstrap: [AppComponent],

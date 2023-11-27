@@ -13,13 +13,10 @@ import es from '@angular/common/locales/es';
 })
 export class MovementsPage implements OnInit {
 
-    cuenta_consultada: Cuenta = {
+    cuenta_consultada: any = {
         id: 0,
-        id_usuario: 0,
         nombre: "",
         saldo: "",
-        fecha_creacion: new Date(),
-        fecha_actualizacion: new Date()
     }
 
     arreglo_movimientos: Movimiento[] = [

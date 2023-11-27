@@ -40,10 +40,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: '**',
-    loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
-  },
-  {
     path: 'update-movement',
     loadChildren: () => import('./pages/update-movement/update-movement.module').then( m => m.UpdateMovementPageModule)
   },
@@ -59,7 +55,14 @@ const routes: Routes = [
     path: 'delete-account',
     loadChildren: () => import('./pages/delete-account/delete-account.module').then( m => m.DeleteAccountPageModule)
   },
-
+  {
+    path: 'apirest',
+    loadChildren: () => import('./pages/apirest/apirest.module').then( m => m.ApirestPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
+  },
 ];
 
 @NgModule({

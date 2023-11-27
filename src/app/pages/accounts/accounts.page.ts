@@ -13,15 +13,9 @@ import { DataBaseServiceService } from 'src/app/services/data-base-service.servi
 })
 export class AccountsPage implements OnInit {
 
-    usuario: Usuario = {
+    usuario: any = {
         id: 0,
         nombre: "",
-        password: "",
-        email: "",
-        telefono: "",
-        fecha_nacimiento: new Date(),
-        imagen_perfil: "",
-        notificaciones: false
     };
 
     arreglo_cuentas: Cuenta[] = [
@@ -76,7 +70,6 @@ export class AccountsPage implements OnInit {
 
         let navigationExtras: NavigationExtras = {
             state: {
-                usuario: this.usuario,
                 cuenta_enviada: cuenta_seleccionada
             }
         }

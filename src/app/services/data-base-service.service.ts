@@ -53,12 +53,15 @@ export class DataBaseServiceService {
 
     //USUARIO
     observableUsuario = new BehaviorSubject([]);
+    obsUsuarioById = new BehaviorSubject([]);
     //CUENTAS
     observableCuenta = new BehaviorSubject([]);
     observableCuentaPorUsuario = new BehaviorSubject([]);
+    obsCuentaById = new BehaviorSubject([]);
     //MOVIMIENTO
     observableMovimiento = new BehaviorSubject([]);
     observableMovimientoCuenta = new BehaviorSubject([]);
+    obsMovimientoById = new BehaviorSubject([]);
     //TIPOS DE MOVIMIENTO
     observableTipoMovimiento = new BehaviorSubject([]);
 
@@ -152,11 +155,39 @@ export class DataBaseServiceService {
         })
     }
 
-
-
     fetchUsuarios(): Observable<Usuario[]> {
         return this.observableUsuario.asObservable();
     }
+
+    getUsuariobyId(id_usuario: number){
+
+        return this.database.executeSql('SELECT * FROM usuario WHERE id = ?', [id_usuario]).then(res => {
+            let items: Usuario[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    items.push({
+                        id: res.rows.item(i).id,
+                        nombre: res.rows.item(i).nombre,
+                        password: res.rows.item(i).password,
+                        email:  res.rows.item(i).email,
+                        telefono:  res.rows.item(i).telefono,
+                        fecha_nacimiento:  res.rows.item(i).fecha_nacimiento,
+                        imagen_perfil:  res.rows.item(i).imagen_perfil,
+                        notificaciones:  res.rows.item(i).notificaciones
+                    })
+                }
+            }
+            this.obsUsuarioById.next(items as any);
+
+        })
+
+    }
+
+    fetchUsuarioById(): Observable<Usuario[]> {
+        return this.obsUsuarioById.asObservable();
+    }
+
+
 
     //CUENTAS -------------------------------------------------------------
     selectCuentas() {
@@ -209,6 +240,31 @@ export class DataBaseServiceService {
         return this.observableCuentaPorUsuario.asObservable();
     }
 
+    getCuentaById(id_cuenta: number) {
+        return this.database.executeSql('SELECT * FROM cuenta WHERE id = ?', [id_cuenta]).then(res => {
+            let items: Cuenta[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    items.push({
+                        id: res.rows.item(i).id,
+                        nombre: res.rows.item(i).nombre,
+                        saldo: res.rows.item(i).saldo,
+                        fecha_creacion: res.rows.item(i).fecha_creacion,
+                        fecha_actualizacion: res.rows.item(i).fecha_actualizacion,
+                        id_usuario: res.rows.item(i).id_usuario
+                    })
+                }
+            }
+
+            this.obsCuentaById.next(items as any);
+
+        })
+    }
+
+    fetchCuentasById(): Observable<Cuenta[]> {
+        return this.obsCuentaById.asObservable();
+    }
+
 
     insertCuenta(
         nombre: string,
@@ -220,6 +276,9 @@ export class DataBaseServiceService {
             let data = [nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario];
             return this.database.executeSql('INSERT INTO cuenta(nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario) VALUES (?, ?, ?, ?, ?)', data).then(res=> {
                 this.selectCuentasUsuario(id_usuario);
+            })
+            .catch((e: any) => {
+                this.presentAlert('Error insert cuenta: ' + e.message);
             });
     }
 
@@ -234,6 +293,9 @@ export class DataBaseServiceService {
             let data = [nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario, id];
             return this.database.executeSql('UPDATE cuenta SET nombre = ?, saldo = ?, fecha_creacion = ?, fecha_actualizacion = ?, id_usuario = ? WHERE id = ?', data).then(data2=> {
                 this.selectCuentasUsuario(id_usuario);
+            })
+            .catch((e: any) => {
+                this.presentAlert('Error update cuenta: ' + e.message);
             });
     }
 
@@ -248,7 +310,9 @@ export class DataBaseServiceService {
 
         return this.database.executeSql('DELETE FROM cuenta WHERE id = ?',[id_cuenta]).then(a=>{
             this.selectCuentasUsuario(id_usuario);
-        })
+        }).catch((e: any) => {
+            this.presentAlert('Error delete cuenta: ' + e.message);
+        });
     }
 
 
@@ -304,6 +368,31 @@ export class DataBaseServiceService {
         return this.observableMovimientoCuenta.asObservable();
     }
 
+    getMovimientoById(id_movimiento: number) {
+        return this.database.executeSql('SELECT * FROM movimiento WHERE id = ?', [id_movimiento]).then(res => {
+            let items: Movimiento[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    items.push({
+                        id: res.rows.item(i).id,
+                        descripcion: res.rows.item(i).descripcion,
+                        monto: res.rows.item(i).monto,
+                        fecha: res.rows.item(i).fecha,
+                        id_cuenta: res.rows.item(i).id_cuenta,
+                        id_tipo_movimiento: res.rows.item(i).id_tipo_movimiento
+                    })
+                }
+            }
+
+            this.obsMovimientoById.next(items as any);
+
+        })
+    }
+
+    fetchMovimientoById(): Observable<Movimiento[]> {
+        return this.obsMovimientoById.asObservable();
+    }
+
     insertMovimiento(
         descripcion: string,
         monto: string,
@@ -314,6 +403,9 @@ export class DataBaseServiceService {
             let data = [descripcion, monto, fecha, id_cuenta, id_tipo_movimiento];
             return this.database.executeSql('INSERT INTO movimiento(descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (?, ?, ?, ?, ?)', data).then(res=> {
                 this.selectMovimientosCuenta(id_cuenta);
+            })
+            .catch((e: any) => {
+                this.presentAlert('Error insert movimiento: ' + e.message);
             });
     }
 
@@ -329,13 +421,17 @@ export class DataBaseServiceService {
         let data = [descripcion, monto, fecha, id_cuenta, id_tipo_movimiento, id];
             return this.database.executeSql('UPDATE movimiento SET descripcion = ?, monto = ?, fecha = ?, id_cuenta = ?, id_tipo_movimiento = ? WHERE id = ?', data).then(data2=> {
                 this.selectMovimientosCuenta(id_cuenta);
+            }).catch((e: any) => {
+                this.presentAlert('Error update movimiento: ' + e.message);
             });
     }
 
     deleteMovimiento(id_movimiento: number, id_cuenta: number){
         return this.database.executeSql('DELETE FROM movimiento WHERE id = ?',[id_movimiento]).then(a=>{
             this.selectMovimientosCuenta(id_cuenta);
-        })
+        }).catch((e: any) => {
+            this.presentAlert('Error delete movimiento: ' + e.message);
+        });
     }
 
     //TIPOS DE MOVIMIENTO -------------------------------------------------------------
@@ -347,7 +443,7 @@ export class DataBaseServiceService {
                 for (var i = 0; i < res.rows.length; i++) {
                     items.push({
                         id: res.rows.item(i).id,
-                        nombre: res.rows.item(i).nombre
+                        descripcion: res.rows.item(i).descripcion
                     })
                 }
             }

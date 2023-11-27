@@ -27,22 +27,20 @@ export class LoginPage implements AfterViewInit {
         }
     ]
 
-    usuarioActual: Usuario = {
+    usuarioActual: any = {
         id: 0,
-        nombre: "",
-        password: "",
-        email: "",
-        telefono: "",
-        fecha_nacimiento: new Date(),
-        imagen_perfil: "",
-        notificaciones: false
+        nombre: ""
     }
+
+    password = "";
 
     private animation!: Animation;
 
     constructor(private router: Router, private animationCtrl: AnimationController, private DBService: DataBaseServiceService) { }
 
     ngAfterViewInit() {
+
+        localStorage.removeItem('usuario');
 
         this.DBService.dbState().subscribe(res => {
             if(res){
@@ -95,7 +93,7 @@ export class LoginPage implements AfterViewInit {
 
         if (this.alfanumerico(this.usuarioActual.nombre) && this.usuarioActual.nombre.length >= 3 && this.usuarioActual.nombre.length <= 8) validacion_usuario = true;
 
-        if (this.numerico(this.usuarioActual.password) && this.usuarioActual.password.length === 4) validacion_password = true;
+        if (this.numerico(this.password) && this.password.length === 4) validacion_password = true;
 
         if (validacion_usuario && validacion_password){
             return true;
@@ -111,7 +109,7 @@ export class LoginPage implements AfterViewInit {
     validarUsuario(){
         for(let i=0; i< this.usuariosRegistrados.length; i++){
             if(this.usuariosRegistrados[i].nombre === this.usuarioActual.nombre){
-                if(this.usuariosRegistrados[i].password === this.usuarioActual.password){
+                if(this.usuariosRegistrados[i].password === this.password){
                     this.usuarioActual.id = this.usuariosRegistrados[i].id
                     return true;
                 }
@@ -131,6 +129,8 @@ export class LoginPage implements AfterViewInit {
 
             console.log("validacion credenciales ok");
 
+            localStorage.setItem('usuario', this.usuarioActual);
+
             this.DBService.presentToast('Login exitoso');
 
             let navigationExtras: NavigationExtras = {
@@ -145,6 +145,10 @@ export class LoginPage implements AfterViewInit {
 
     goToRegister(){
         this.router.navigate(['/register']);
+    }
+
+    goToApi(){
+        this.router.navigate(['/apirest']);
     }
 
 }

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
-import { Usuario } from '../interfaces/usuario';
 import { Cuenta } from '../interfaces/cuenta';
 import { Movimiento } from '../interfaces/movimiento';
 import { TipoMovimiento } from '../interfaces/tipo_movimiento';
@@ -14,15 +12,10 @@ import { TipoMovimiento } from '../interfaces/tipo_movimiento';
 })
 export class CreateMovementPage implements OnInit {
 
-    usuario: Usuario = {
+    usuario: any = {
         id: 0,
         nombre: "",
-        password: "",
-        email: "",
-        telefono: "",
-        fecha_nacimiento: new Date(),
-        imagen_perfil: "",
-        notificaciones: false
+
     };
 
     arreglo_cuentas: Cuenta[] = [
@@ -36,27 +29,25 @@ export class CreateMovementPage implements OnInit {
         }
     ]
 
-    cuenta_seleccionada: Cuenta = {
+    cuenta_seleccionada: any = {
         id: 0,
         nombre: "",
         saldo: "",
-        fecha_creacion: new Date(),
-        fecha_actualizacion: new Date(),
-        id_usuario: 0
     }
 
     tipos_movimiento: TipoMovimiento[] = [
-        { id: 0, nombre: "" }
+        {
+            id: 0,
+            descripcion: ""
+        }
     ]
 
-    nuevo_movimiento: Movimiento = {
-        id: 0,
-        descripcion: "",
-        monto: "",
-        fecha: new Date(),
-        id_tipo_movimiento: 1,
-        id_cuenta: 0,
-    }
+        id = 0;
+        descripcion = "";
+        monto = "";
+        fecha = new Date();
+        id_cuenta = 0;
+        id_tipo_movimiento = 0;
 
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
         this.activeRouter.queryParams.subscribe(params => {
@@ -90,84 +81,93 @@ export class CreateMovementPage implements OnInit {
             }
         })
 
+        this.DBService.dbState().subscribe(res => {
+            if(res){
+                this.DBService.fetchCuentasPorUsuario().subscribe(item => {
+                    this.arreglo_cuentas = item;
+                })
+            }
+        })
+
     }
 
-    setCuenta(id_cuenta: number) {
-        this.nuevo_movimiento.id_cuenta = id_cuenta;
+    setCuenta(cuenta: Cuenta) {
+        this.id_cuenta = cuenta.id;
+        this.cuenta_seleccionada.id = cuenta.id;
+        this.cuenta_seleccionada.nombre = cuenta.nombre;
+        this.cuenta_seleccionada.saldo = cuenta.saldo;
     }
 
-    setTipoCuenta(id_tipo_cuenta: number) {
-        this.nuevo_movimiento.id_tipo_movimiento = id_tipo_cuenta;
+    setTipoCuenta(tipo: TipoMovimiento) {
+        this.id_tipo_movimiento = tipo.id;
     }
 
     esNumerico(texto: string) {
-        if (typeof texto !== "string") return false;
 
         if (texto.replace(/[0-9]/g, "") === "") {
-            return true;
+
+            if(texto !== "0"){
+                return true;
+            }
+            else{
+                this.DBService.presentAlert("El monto no puede ser cero");
+                return false;
+            }
+
         }
 
         else {
+            this.DBService.presentAlert("No es numerico");
             return false;
         }
+
     }
 
     validarIngreso() {
         let monto_ok = false;
         let descripcion_ok = false;
 
-        if (this.esNumerico(this.nuevo_movimiento.monto) && this.nuevo_movimiento.monto != "0"){
+        if (this.esNumerico(this.monto)){
             monto_ok = true;
         }
-        else{
-            if(!this.esNumerico(this.nuevo_movimiento.monto)) this.DBService.presentToast('Monto no numerico');
-            if(!(this.nuevo_movimiento.monto != "0")) this.DBService.presentToast('Monto menor o igual a cero');
-        }
 
-        if (this.nuevo_movimiento.descripcion.length > 0){
+        if (this.descripcion.length > 0){
             descripcion_ok = true;
         }
         else{
-            if(!(this.nuevo_movimiento.descripcion.length > 0)) this.DBService.presentToast('Descripción vacía');
+            this.DBService.presentAlert("Descripcion vacia");
         }
+
         return (monto_ok && descripcion_ok);
     }
 
-    async ingresoExitoso() {
+    ingresoExitoso() {
 
-        if (this.validarIngreso()) {
+        this.DBService.insertMovimiento(this.descripcion,this.monto,new Date(),this.id_cuenta,this.id_tipo_movimiento);
 
-            this.DBService.insertMovimiento
-            (
-                this.nuevo_movimiento.descripcion,
-                this.nuevo_movimiento.monto,
-                new Date(),
-                this.nuevo_movimiento.id_cuenta,
-                this.nuevo_movimiento.id_tipo_movimiento
-            )
-
-            this.DBService.presentToast('Movimiento registrado exitosamente');
-
-            this.goMovements();
-        }
-
-        else {
-
-            this.DBService.presentToast('Los datos ingresados no son válidos');
-
-        }
+        this.goMovements();
     }
 
     goMovements() {
 
-        this.router.navigate(['/movements']);
+        let navigationExtras: NavigationExtras = {
+            state: {
+                cuenta_enviada: this.cuenta_seleccionada
+            }
+        }
 
+        this.router.navigate(['/movements'], navigationExtras);
     }
 
     goHome() {
 
-        this.router.navigate(['/home']);
+        let navigationExtras: NavigationExtras = {
+            state: {
+                usuario: this.usuario
+            }
+        }
 
+        this.router.navigate(['/home'], navigationExtras);
     }
 
 }
