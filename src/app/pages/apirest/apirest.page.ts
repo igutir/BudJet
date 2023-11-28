@@ -45,13 +45,6 @@ export class ApirestPage implements OnInit {
         });
     }
 
-    /* getMovimiento(id_movimiento: any){
-        this.api.getMovimiento(id_movimiento).subscribe((data)=>{
-            console.log(data)
-            this.movimiento = data;
-        });
-    } */
-
     getMovimientos() {
         this.api.getMovimientos().subscribe((data) => {
             this.movimientos = data;
@@ -111,12 +104,4 @@ export class ApirestPage implements OnInit {
     compareWithFn = (o1: any, o2: any) => {
         return o1 && o2 ? o1.id === o2.id : o1 === o2;
     };
-
-
-
-
-
-
-
-
 }

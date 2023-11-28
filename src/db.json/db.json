@@ -1,7 +1,7 @@
 {
   "cuentas": [
     {
-      "nombre": "hugger",
+      "nombre": "primera",
       "saldo": "610050479",
       "fecha_creacion": "2029-06-10T23:17:57.147Z",
       "fecha_actualizacion": "2026-05-03T06:41:06.391Z",
@@ -72,14 +72,6 @@
     }
   ],
   "movimientos": [
-    {
-      "descripcion": "Temporibus assumenda recusandae nemo veniam necessitatibus.",
-      "monto": "804589633",
-      "fecha": "2023-01-17T04:03:39.739Z",
-      "tipo_movimiento": "mainland",
-      "id_cuenta": 2,
-      "id": 2
-    },
     {
       "descripcion": "Nostrum rerum molestias rem aspernatur voluptates laudantium libero.",
       "monto": "539170236",
@@ -455,6 +447,14 @@
       "tipo_movimiento": "cost",
       "id_cuenta": 3,
       "id": 50
+    },
+    {
+      "id": 51,
+      "descripcion": "Prueba",
+      "monto": "15000",
+      "fecha": "27/11/2023",
+      "tipo_movimiento": "Ingreso",
+      "id_cuenta": 7
     }
   ]
 }
