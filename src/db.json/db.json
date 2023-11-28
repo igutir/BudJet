@@ -1,0 +1,460 @@
+{
+  "cuentas": [
+    {
+      "nombre": "hugger",
+      "saldo": "610050479",
+      "fecha_creacion": "2029-06-10T23:17:57.147Z",
+      "fecha_actualizacion": "2026-05-03T06:41:06.391Z",
+      "id": 1
+    },
+    {
+      "nombre": "keep",
+      "saldo": "302032750",
+      "fecha_creacion": "2087-06-12T01:46:32.408Z",
+      "fecha_actualizacion": "2031-05-03T15:04:55.991Z",
+      "id": 2
+    },
+    {
+      "nombre": "mill",
+      "saldo": "273522894",
+      "fecha_creacion": "2095-10-01T14:31:11.786Z",
+      "fecha_actualizacion": "2012-07-15T13:57:34.414Z",
+      "id": 3
+    },
+    {
+      "nombre": "sidewalk",
+      "saldo": "795216390",
+      "fecha_creacion": "2087-05-23T03:25:01.245Z",
+      "fecha_actualizacion": "2067-05-24T13:18:02.363Z",
+      "id": 4
+    },
+    {
+      "nombre": "toothpaste",
+      "saldo": "732821654",
+      "fecha_creacion": "2075-04-22T15:37:24.589Z",
+      "fecha_actualizacion": "2038-08-25T00:31:06.662Z",
+      "id": 5
+    },
+    {
+      "nombre": "hygienic",
+      "saldo": "191618246",
+      "fecha_creacion": "2096-03-28T13:50:45.560Z",
+      "fecha_actualizacion": "2079-03-05T12:45:59.421Z",
+      "id": 6
+    },
+    {
+      "nombre": "fingernail",
+      "saldo": "264343493",
+      "fecha_creacion": "2047-04-28T22:15:00.391Z",
+      "fecha_actualizacion": "2051-10-23T02:36:22.964Z",
+      "id": 7
+    },
+    {
+      "nombre": "cousin",
+      "saldo": "364442113",
+      "fecha_creacion": "2008-08-23T14:38:24.910Z",
+      "fecha_actualizacion": "2004-11-22T19:01:47.634Z",
+      "id": 8
+    },
+    {
+      "nombre": "printing",
+      "saldo": "415451943",
+      "fecha_creacion": "2029-08-29T13:15:41.815Z",
+      "fecha_actualizacion": "2015-02-03T06:48:30.779Z",
+      "id": 9
+    },
+    {
+      "nombre": "biology",
+      "saldo": "642678421",
+      "fecha_creacion": "2073-08-20T11:40:56.510Z",
+      "fecha_actualizacion": "1995-02-05T17:19:45.517Z",
+      "id": 10
+    }
+  ],
+  "movimientos": [
+    {
+      "descripcion": "Temporibus assumenda recusandae nemo veniam necessitatibus.",
+      "monto": "804589633",
+      "fecha": "2023-01-17T04:03:39.739Z",
+      "tipo_movimiento": "mainland",
+      "id_cuenta": 2,
+      "id": 2
+    },
+    {
+      "descripcion": "Nostrum rerum molestias rem aspernatur voluptates laudantium libero.",
+      "monto": "539170236",
+      "fecha": "2023-01-27T12:59:28.936Z",
+      "tipo_movimiento": "synergy",
+      "id_cuenta": 3,
+      "id": 3
+    },
+    {
+      "descripcion": "Quae minus quasi sint magnam molestias facere.",
+      "monto": "314528809",
+      "fecha": "2023-02-22T18:52:10.615Z",
+      "tipo_movimiento": "blister",
+      "id_cuenta": 4,
+      "id": 4
+    },
+    {
+      "descripcion": "Facere ipsa adipisci optio nobis officia tempora tempora in vero.",
+      "monto": "267911042",
+      "fecha": "2023-03-23T08:53:47.383Z",
+      "tipo_movimiento": "keep",
+      "id_cuenta": 5,
+      "id": 5
+    },
+    {
+      "descripcion": "Illum rerum corrupti dolore dolore.",
+      "monto": "130882114",
+      "fecha": "2022-11-27T16:26:42.737Z",
+      "tipo_movimiento": "splendor",
+      "id_cuenta": 6,
+      "id": 6
+    },
+    {
+      "descripcion": "Odit nesciunt dicta animi animi voluptatibus in tempora veniam veritatis.",
+      "monto": "046947664",
+      "fecha": "2023-09-09T06:02:26.354Z",
+      "tipo_movimiento": "fact",
+      "id_cuenta": 7,
+      "id": 7
+    },
+    {
+      "descripcion": "Nesciunt incidunt neque temporibus dignissimos in.",
+      "monto": "362747658",
+      "fecha": "2023-02-25T08:34:33.279Z",
+      "tipo_movimiento": "point",
+      "id_cuenta": 8,
+      "id": 8
+    },
+    {
+      "descripcion": "Sit rerum eum inventore ipsa repudiandae.",
+      "monto": "673623458",
+      "fecha": "2023-08-19T13:18:44.020Z",
+      "tipo_movimiento": "codling",
+      "id_cuenta": 9,
+      "id": 9
+    },
+    {
+      "descripcion": "Magni perspiciatis repellendus veniam rem iste dolorum quis occaecati.",
+      "monto": "698142532",
+      "fecha": "2023-09-18T14:55:43.724Z",
+      "tipo_movimiento": "morsel",
+      "id_cuenta": 10,
+      "id": 10
+    },
+    {
+      "descripcion": "Hic doloribus nulla harum labore totam nobis.",
+      "monto": "820913348",
+      "fecha": "2023-10-30T14:44:08.028Z",
+      "tipo_movimiento": "urge",
+      "id_cuenta": 7,
+      "id": 11
+    },
+    {
+      "descripcion": "Magni explicabo accusantium at nisi vero iste excepturi.",
+      "monto": "966477780",
+      "fecha": "2023-08-12T16:42:40.862Z",
+      "tipo_movimiento": "opposite",
+      "id_cuenta": 3,
+      "id": 12
+    },
+    {
+      "descripcion": "Eligendi impedit ipsum aperiam eligendi officiis eaque voluptate inventore.",
+      "monto": "302975095",
+      "fecha": "2023-09-15T14:17:25.941Z",
+      "tipo_movimiento": "catastrophe",
+      "id_cuenta": 8,
+      "id": 13
+    },
+    {
+      "descripcion": "Labore maxime tempora placeat distinctio nostrum ducimus.",
+      "monto": "990891497",
+      "fecha": "2022-12-13T20:06:28.454Z",
+      "tipo_movimiento": "pathway",
+      "id_cuenta": 5,
+      "id": 14
+    },
+    {
+      "descripcion": "Repellat esse ex.",
+      "monto": "194806411",
+      "fecha": "2023-03-06T19:13:50.704Z",
+      "tipo_movimiento": "proximity",
+      "id_cuenta": 10,
+      "id": 15
+    },
+    {
+      "descripcion": "Expedita error ab sint blanditiis vel libero dicta.",
+      "monto": "045199374",
+      "fecha": "2023-07-09T08:32:06.971Z",
+      "tipo_movimiento": "inability",
+      "id_cuenta": 6,
+      "id": 16
+    },
+    {
+      "descripcion": "Magnam natus repellat blanditiis facilis quidem nesciunt.",
+      "monto": "444387101",
+      "fecha": "2023-10-09T19:18:57.034Z",
+      "tipo_movimiento": "mood",
+      "id_cuenta": 7,
+      "id": 17
+    },
+    {
+      "descripcion": "Possimus provident sapiente totam.",
+      "monto": "397863992",
+      "fecha": "2023-03-03T07:34:15.685Z",
+      "tipo_movimiento": "still",
+      "id_cuenta": 6,
+      "id": 18
+    },
+    {
+      "descripcion": "Doloribus blanditiis molestias minus expedita quis quasi recusandae eum laudantium.",
+      "monto": "026288741",
+      "fecha": "2023-01-11T05:10:36.637Z",
+      "tipo_movimiento": "hardhat",
+      "id_cuenta": 5,
+      "id": 19
+    },
+    {
+      "descripcion": "A numquam soluta.",
+      "monto": "727611963",
+      "fecha": "2023-10-23T02:13:46.868Z",
+      "tipo_movimiento": "goat",
+      "id_cuenta": 8,
+      "id": 20
+    },
+    {
+      "descripcion": "Placeat vel aspernatur sunt sed eaque assumenda vel.",
+      "monto": "237197582",
+      "fecha": "2023-05-01T17:25:09.969Z",
+      "tipo_movimiento": "mastoid",
+      "id_cuenta": 2,
+      "id": 21
+    },
+    {
+      "descripcion": "Molestias atque laborum iusto soluta dolorum perferendis consectetur.",
+      "monto": "504654635",
+      "fecha": "2023-04-06T04:20:11.793Z",
+      "tipo_movimiento": "ceramics",
+      "id_cuenta": 4,
+      "id": 22
+    },
+    {
+      "descripcion": "Quibusdam nulla similique.",
+      "monto": "022147433",
+      "fecha": "2023-02-13T16:15:38.717Z",
+      "tipo_movimiento": "switching",
+      "id_cuenta": 1,
+      "id": 23
+    },
+    {
+      "descripcion": "Sapiente veniam adipisci autem voluptate veritatis natus exercitationem veniam.",
+      "monto": "860034999",
+      "fecha": "2023-04-30T04:22:00.151Z",
+      "tipo_movimiento": "dwelling",
+      "id_cuenta": 5,
+      "id": 24
+    },
+    {
+      "descripcion": "Perspiciatis necessitatibus voluptatem libero ex.",
+      "monto": "267102275",
+      "fecha": "2023-07-30T16:32:17.655Z",
+      "tipo_movimiento": "dill",
+      "id_cuenta": 4,
+      "id": 25
+    },
+    {
+      "descripcion": "Laborum modi culpa repudiandae esse minima dolorum iste.",
+      "monto": "122816538",
+      "fecha": "2023-11-02T15:40:32.832Z",
+      "tipo_movimiento": "learning",
+      "id_cuenta": 8,
+      "id": 26
+    },
+    {
+      "descripcion": "Pariatur sit neque deleniti libero ex.",
+      "monto": "579930232",
+      "fecha": "2023-01-04T09:52:56.615Z",
+      "tipo_movimiento": "valley",
+      "id_cuenta": 3,
+      "id": 27
+    },
+    {
+      "descripcion": "Nam itaque molestiae sit magnam eum pariatur.",
+      "monto": "395390593",
+      "fecha": "2022-12-10T23:29:26.144Z",
+      "tipo_movimiento": "commodity",
+      "id_cuenta": 7,
+      "id": 28
+    },
+    {
+      "descripcion": "Harum tempora perspiciatis eum veniam nihil ad.",
+      "monto": "006577333",
+      "fecha": "2023-10-15T21:47:00.552Z",
+      "tipo_movimiento": "affect",
+      "id_cuenta": 4,
+      "id": 29
+    },
+    {
+      "descripcion": "Vel incidunt deleniti.",
+      "monto": "680537032",
+      "fecha": "2023-01-01T07:12:36.404Z",
+      "tipo_movimiento": "twister",
+      "id_cuenta": 10,
+      "id": 30
+    },
+    {
+      "descripcion": "In amet et iure.",
+      "monto": "393057058",
+      "fecha": "2023-03-22T01:46:48.534Z",
+      "tipo_movimiento": "chart",
+      "id_cuenta": 2,
+      "id": 31
+    },
+    {
+      "descripcion": "Eligendi occaecati ad autem eum dolorum ipsum.",
+      "monto": "389567170",
+      "fecha": "2023-01-17T22:23:47.504Z",
+      "tipo_movimiento": "horde",
+      "id_cuenta": 6,
+      "id": 32
+    },
+    {
+      "descripcion": "Illo illum adipisci consequuntur quidem nobis rem deserunt.",
+      "monto": "082465634",
+      "fecha": "2022-11-29T15:56:59.644Z",
+      "tipo_movimiento": "edge",
+      "id_cuenta": 5,
+      "id": 33
+    },
+    {
+      "descripcion": "Mollitia reprehenderit similique numquam officia cupiditate eius reiciendis quis.",
+      "monto": "963207461",
+      "fecha": "2023-06-02T16:16:05.278Z",
+      "tipo_movimiento": "chug",
+      "id_cuenta": 2,
+      "id": 34
+    },
+    {
+      "descripcion": "Facere ad quisquam accusantium adipisci repellendus quae adipisci.",
+      "monto": "804006941",
+      "fecha": "2022-12-02T18:09:19.351Z",
+      "tipo_movimiento": "hop",
+      "id_cuenta": 2,
+      "id": 35
+    },
+    {
+      "descripcion": "A exercitationem laborum sit aspernatur delectus quidem in aut accusamus.",
+      "monto": "866342038",
+      "fecha": "2023-06-24T15:35:11.161Z",
+      "tipo_movimiento": "subcontractor",
+      "id_cuenta": 1,
+      "id": 36
+    },
+    {
+      "descripcion": "Ipsa enim sapiente illo consequatur cumque veniam accusamus.",
+      "monto": "075060431",
+      "fecha": "2023-09-09T03:52:48.557Z",
+      "tipo_movimiento": "divider",
+      "id_cuenta": 4,
+      "id": 37
+    },
+    {
+      "descripcion": "Fugiat neque voluptatibus iure cupiditate occaecati atque vero quae veniam.",
+      "monto": "262495343",
+      "fecha": "2022-11-29T07:40:11.032Z",
+      "tipo_movimiento": "penny",
+      "id_cuenta": 8,
+      "id": 38
+    },
+    {
+      "descripcion": "Ratione aperiam recusandae ipsa ex nulla.",
+      "monto": "640940342",
+      "fecha": "2022-12-17T22:43:25.468Z",
+      "tipo_movimiento": "initiative",
+      "id_cuenta": 8,
+      "id": 39
+    },
+    {
+      "descripcion": "Sit est nulla impedit id.",
+      "monto": "098969344",
+      "fecha": "2023-11-08T22:07:55.507Z",
+      "tipo_movimiento": "smith",
+      "id_cuenta": 5,
+      "id": 40
+    },
+    {
+      "descripcion": "Quaerat aliquid libero numquam saepe ratione voluptates pariatur esse dolor.",
+      "monto": "174408318",
+      "fecha": "2023-09-14T19:38:37.110Z",
+      "tipo_movimiento": "campanile",
+      "id_cuenta": 5,
+      "id": 41
+    },
+    {
+      "descripcion": "Atque autem sint optio quas minus perferendis ipsum.",
+      "monto": "294807828",
+      "fecha": "2023-08-16T16:21:54.706Z",
+      "tipo_movimiento": "curse",
+      "id_cuenta": 5,
+      "id": 42
+    },
+    {
+      "descripcion": "Earum nisi tempore necessitatibus commodi ab quidem.",
+      "monto": "026245072",
+      "fecha": "2023-07-09T17:31:00.391Z",
+      "tipo_movimiento": "refectory",
+      "id_cuenta": 7,
+      "id": 43
+    },
+    {
+      "descripcion": "Inventore odio ratione laudantium iure minus incidunt sequi.",
+      "monto": "670040241",
+      "fecha": "2023-01-30T13:29:06.780Z",
+      "tipo_movimiento": "consulting",
+      "id_cuenta": 3,
+      "id": 45
+    },
+    {
+      "descripcion": "Aliquid nihil tempore voluptatem culpa.",
+      "monto": "542310834",
+      "fecha": "2023-04-01T00:25:33.944Z",
+      "tipo_movimiento": "mammoth",
+      "id_cuenta": 5,
+      "id": 46
+    },
+    {
+      "descripcion": "Voluptate explicabo incidunt ex tempore pariatur.",
+      "monto": "436009086",
+      "fecha": "2022-12-30T15:07:27.242Z",
+      "tipo_movimiento": "plow",
+      "id_cuenta": 6,
+      "id": 47
+    },
+    {
+      "descripcion": "Animi aliquam quo eius eligendi voluptas eaque fugiat.",
+      "monto": "514318712",
+      "fecha": "2023-06-26T16:00:44.394Z",
+      "tipo_movimiento": "fortress",
+      "id_cuenta": 9,
+      "id": 48
+    },
+    {
+      "descripcion": "Illum dolorum nulla expedita animi reprehenderit odit suscipit fugit.",
+      "monto": "398594451",
+      "fecha": "2023-07-17T09:04:37.765Z",
+      "tipo_movimiento": "usher",
+      "id_cuenta": 1,
+      "id": 49
+    },
+    {
+      "descripcion": "Necessitatibus ab id voluptatem culpa quas quam.",
+      "monto": "321807173",
+      "fecha": "2023-02-14T03:20:44.234Z",
+      "tipo_movimiento": "cost",
+      "id_cuenta": 3,
+      "id": 50
+    }
+  ]
+}

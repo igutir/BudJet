@@ -30,7 +30,7 @@
 
         <ion-row>
             <div class="profile-img-container">
-                <ion-img class="profile-img" src="/assets/img/default_profile_img.png"></ion-img>
+                <ion-img class="profile-img" *ngIf="imagen" src="{{imagen}}" src="" (click)="takePicture()"></ion-img>
             </div>
         </ion-row>
 

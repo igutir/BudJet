@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
+import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 
 @Component({
     selector: 'app-accounts',
@@ -11,43 +12,65 @@ import es from '@angular/common/locales/es';
 })
 export class AccountsPage implements OnInit {
 
-    cuentas_registradas: Cuenta[] = [
-        {
-            id: 1,
-            id_user: 1,
-            nombre: "Personal",
-            saldo: 1400000,
-            fecha_creacion: new Date(2020, 5, 19),
-            fecha_actualizacion: new Date()
-        }, {
-            id: 2,
-            id_user: 1,
-            nombre: "Ahorro",
-            saldo: 450000,
-            fecha_creacion: new Date(2020, 12, 5),
-            fecha_actualizacion: new Date()
-        }
-    ];
+    usuario: any = {
+        id: 0,
+        nombre: "",
+    };
 
-    constructor(private router: Router) { }
+    arreglo_cuentas: Cuenta[] = [
+        {
+            id: 0,
+            nombre: "",
+            saldo: "",
+            fecha_creacion: new Date(),
+            fecha_actualizacion: new Date(),
+            id_usuario: 0
+        }
+    ]
+
+    cuenta_seleccionada: any = {
+        id: 0,
+        nombre: "",
+        saldo: "",
+    }
+
+    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+        this.activeRouter.queryParams.subscribe(params => {
+            if (this.router.getCurrentNavigation()?.extras?.state) {
+                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
+            }
+        })
+    }
 
     ngOnInit() {
         registerLocaleData( es );
+
+        this.DBService.selectCuentasUsuario(this.usuario.id);
+
+        this.DBService.dbState().subscribe(res => {
+            if(res){
+                this.DBService.fetchCuentasPorUsuario().subscribe(item => {
+                    this.arreglo_cuentas = item;
+                })
+            }
+        })
     }
 
     seleccionarCuenta(id_cuenta: number) {
 
-        let cuenta_seleccionada;
-
-        for(var cuenta in this.cuentas_registradas){
-            if(this.cuentas_registradas[cuenta].id === id_cuenta){
-                cuenta_seleccionada = this.cuentas_registradas[cuenta];
+        for(var cuenta in this.arreglo_cuentas){
+            if(this.arreglo_cuentas[cuenta].id === id_cuenta){
+                this.cuenta_seleccionada.id = id_cuenta;
+                this.cuenta_seleccionada.nombre = this.arreglo_cuentas[cuenta].nombre;
+                this.cuenta_seleccionada.saldo = this.arreglo_cuentas[cuenta].saldo;
             }
         }
 
+
         let navigationExtras: NavigationExtras = {
             state: {
-                cuenta_enviada: cuenta_seleccionada
+                usuario: this.usuario,
+                cuenta_enviada: this.cuenta_seleccionada
             }
         }
 
@@ -56,7 +79,13 @@ export class AccountsPage implements OnInit {
 
     goToCreateAccounts() {
 
-        this.router.navigate(['/create-account']);
+        let navigationExtras: NavigationExtras = {
+            state: {
+                usuario: this.usuario
+            }
+        }
+
+        this.router.navigate(['/create-account'], navigationExtras);
     }
 
 }

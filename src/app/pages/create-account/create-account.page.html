@@ -41,7 +41,7 @@
             <ion-col>
                 <mat-form-field>
                     <mat-label>Saldo inicial</mat-label>
-                    <input matInput type="number" placeholder="0" min="0" [(ngModel)]="nueva_cuenta.saldo">
+                    <input matInput type="number" placeholder="0" min="0" required [(ngModel)]="nueva_cuenta.saldo">
                     <span matTextPrefix>$</span>
                 </mat-form-field>
             </ion-col>
@@ -50,6 +50,7 @@
         <ion-row>
             <ion-col>
                 <ion-button (click)="ingresoExitoso()">Ingresar cuenta</ion-button>
+                <ion-button (click)="goHome()">Volver al Inicio</ion-button>
             </ion-col>
         </ion-row>
 

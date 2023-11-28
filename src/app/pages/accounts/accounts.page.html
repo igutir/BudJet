@@ -26,7 +26,7 @@
         </ion-list>
     </div>
 
-    <ion-list *ngFor="let cuenta of cuentas_registradas" [inset]="true">
+    <ion-list *ngFor="let cuenta of arreglo_cuentas" [inset]="true">
         <ion-item [button]="true" (click)="seleccionarCuenta(cuenta.id)">
             <ion-icon color="tertiary" slot="start" name="card-outline" size="large"></ion-icon>
             <ion-label>{{cuenta.nombre}}</ion-label>

@@ -1,8 +1,8 @@
 export interface Movimiento {
     id: number;
-    id_cuenta: number;
     descripcion: string;
-    monto: number;
+    monto: string;
     fecha: Date;
-    tipo_movimiento: number;
+    id_cuenta: number;
+    id_tipo_movimiento: number;
 }

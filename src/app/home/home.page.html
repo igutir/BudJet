@@ -21,7 +21,7 @@
     <div class="ion-padding">
         <ion-list class="welcome-card">
             <ion-item>
-                <h1>¡Bienvenido {{ user.username }}!</h1>
+                <h1>¡Bienvenido {{ usuario.nombre }}!</h1>
             </ion-item>
         </ion-list>
     </div>
@@ -53,8 +53,4 @@
 
 </ion-content>
 
-<ion-footer [translucent]="true">
-    <ion-toolbar>
-        <h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
-    </ion-toolbar>
-</ion-footer>
+<app-footer></app-footer>

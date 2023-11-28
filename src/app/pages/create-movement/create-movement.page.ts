@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 import { Cuenta } from '../interfaces/cuenta';
 import { Movimiento } from '../interfaces/movimiento';
 import { TipoMovimiento } from '../interfaces/tipo_movimiento';
@@ -12,118 +12,185 @@ import { TipoMovimiento } from '../interfaces/tipo_movimiento';
 })
 export class CreateMovementPage implements OnInit {
 
-    cuentas_usuario: Cuenta[] = [
+    usuario: any = {
+        id: 0,
+        nombre: "",
+
+    };
+
+    arreglo_cuentas: Cuenta[] = [
         {
-            id: 1,
-            id_user: 1,
-            nombre: "Personal",
-            saldo: 500000,
-            fecha_creacion: new Date(),
-            fecha_actualizacion: new Date()
-        },
-        {
-            id: 2,
-            id_user: 1,
-            nombre: "Ahorro",
-            saldo: 1500000,
+            id: 0,
+            nombre: "",
+            saldo: "",
             fecha_creacion: new Date(),
             fecha_actualizacion: new Date(),
+            id_usuario: 0
         }
     ]
 
-    nuevo_movimiento: Movimiento = {
+    cuenta_seleccionada: any = {
         id: 0,
-        id_cuenta: 0,
-        descripcion: "",
-        monto: 0,
-        fecha: new Date(),
-        tipo_movimiento: 1
+        nombre: "",
+        saldo: "",
     }
 
     tipos_movimiento: TipoMovimiento[] = [
-        { id: 1, nombre: "Ingreso" },
-        { id: 2, nombre: "Gasto" }
+        {
+            id: 0,
+            descripcion: ""
+        }
     ]
 
-    constructor(private router: Router, public alertController: AlertController) { }
+    id = 0;
+    descripcion = "";
+    monto = "";
+    fecha = new Date();
+    id_cuenta = 0;
+    id_tipo_movimiento = 0;
 
-    ngOnInit() {
+    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+        this.activeRouter.queryParams.subscribe(params => {
+            if (this.router.getCurrentNavigation()?.extras?.state) {
+                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
+            }
+        })
     }
 
-    setIdMov(){
-        this.nuevo_movimiento.id = 1;
+    ngOnInit() {
+
+        //CUENTAS REGISTRADAS DEL USUARIO
+        this.DBService.selectCuentasUsuario(this.usuario.id);
+
+        this.DBService.dbState().subscribe(res => {
+            if(res){
+                this.DBService.fetchCuentasPorUsuario().subscribe(item => {
+                    this.arreglo_cuentas = item;
+                })
+            }
+        })
+
+        //TIPOS DE MOVIMIENTO REGISTRADOS EN LA APP
+        this.DBService.selectTiposMovimiento();
+
+        this.DBService.dbState().subscribe(res => {
+            if(res){
+                this.DBService.fetchTiposMovimiento().subscribe(item => {
+                    this.tipos_movimiento = item;
+                })
+            }
+        })
+
+        this.DBService.dbState().subscribe(res => {
+            if(res){
+                this.DBService.fetchCuentasPorUsuario().subscribe(item => {
+                    this.arreglo_cuentas = item;
+                })
+            }
+        })
+
     }
 
     setCuenta(cuenta: Cuenta) {
-        this.nuevo_movimiento.id_cuenta = cuenta.id;
+        this.id_cuenta = cuenta.id;
+        this.cuenta_seleccionada.id = cuenta.id;
+        this.cuenta_seleccionada.nombre = cuenta.nombre;
+        this.cuenta_seleccionada.saldo = cuenta.saldo;
     }
 
-    SetTipo(tipo: TipoMovimiento) {
-        this.nuevo_movimiento.tipo_movimiento = tipo.id;
+    setTipoCuenta(tipo: TipoMovimiento) {
+        this.id_tipo_movimiento = tipo.id;
     }
 
-    esNumerico(numero: number) {
-        return (typeof numero === "number");
+    esNumerico(texto: string) {
+
+        if (texto.replace(/[0-9]/g, "") === "") {
+
+            if(texto !== "0"){
+                return true;
+            }
+            else{
+                this.DBService.presentAlert("El monto no puede ser cero");
+                return false;
+            }
+
+        }
+
+        else {
+            this.DBService.presentAlert("No es numerico");
+            return false;
+        }
+
     }
 
     validarIngreso() {
         let monto_ok = false;
         let descripcion_ok = false;
 
-        if (this.esNumerico(this.nuevo_movimiento.monto) && this.nuevo_movimiento.monto > 0){
+        if (this.esNumerico(this.monto)){
             monto_ok = true;
         }
-        else{
-            if(!this.esNumerico(this.nuevo_movimiento.monto)) console.log("monto no numerico");
-            if(!(this.nuevo_movimiento.monto > 0)) console.log("monto menor o igual a cero");
-        }
 
-        if (this.nuevo_movimiento.descripcion.length > 0){
+        if (this.descripcion.length > 0){
             descripcion_ok = true;
         }
         else{
-            if(!(this.nuevo_movimiento.descripcion.length > 0)) console.log("descripcion vacia");
+            this.DBService.presentAlert("Descripcion vacia");
         }
+
         return (monto_ok && descripcion_ok);
     }
 
-    async ingresoExitoso() {
-        if (this.validarIngreso()) {
+    actualizarSaldoCuenta(){
 
-            this.setIdMov();
+        let monto_movimiento = parseInt(this.monto);
+        let saldo_cuenta = parseInt(this.cuenta_seleccionada.saldo);
 
-            const alert = await this.alertController.create({
-                header: 'Ingreso exitoso',
-                message: 'Movimiento registrado exitosamente',
-                buttons: ['OK']
-            });
+        let nuevo_saldo = 0;
 
-            await alert.present();
+        if(this.id_tipo_movimiento === 1){
 
-            this.goMovements();
+            nuevo_saldo = (saldo_cuenta + monto_movimiento);
+        }
+        else{
+            nuevo_saldo = (saldo_cuenta - monto_movimiento);
         }
 
-        else {
-            const alert = await this.alertController.create({
-                header: 'Error',
-                message: 'Los datos ingresados no son válidos',
-                buttons: ['OK']
-            });
+        let saldo_final = String(nuevo_saldo);
 
-            await alert.present();
-        }
+        this.DBService.updateMontoCuentas(this.cuenta_seleccionada.id, saldo_final);
+    }
+
+    ingresoExitoso() {
+
+        this.DBService.insertMovimiento(this.descripcion,this.monto,new Date(),this.id_cuenta,this.id_tipo_movimiento);
+
+        this.actualizarSaldoCuenta();
+
+        this.goMovements();
     }
 
     goMovements() {
 
-        this.router.navigate(['/movements']);
+        let navigationExtras: NavigationExtras = {
+            state: {
+                usuario: this.usuario,
+                cuenta_enviada: this.cuenta_seleccionada
+            }
+        }
 
+        this.router.navigate(['/movements'], navigationExtras);
     }
 
     goHome() {
 
-        this.router.navigate(['/home']);
+        let navigationExtras: NavigationExtras = {
+            state: {
+                usuario: this.usuario
+            }
+        }
 
+        this.router.navigate(['/home'], navigationExtras);
     }
 
 }

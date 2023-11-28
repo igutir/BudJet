@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ElementRef, ViewChildren } from '@angular/cor
 import type { QueryList } from '@angular/core';
 import type { Animation } from '@ionic/angular';
 import { AnimationController, IonItem } from '@ionic/angular';
+import { Camera, CameraResultType } from '@capacitor/camera';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 
@@ -21,6 +22,8 @@ export class ProfilePage implements AfterViewInit {
         email: "correo@budjet.cl",
         telefono: 123456789
     };
+
+    imagen: any = "/assets/img/default_profile_img.png";
 
     constructor(private animationCtrl: AnimationController) {
         registerLocaleData(es);
@@ -75,6 +78,19 @@ export class ProfilePage implements AfterViewInit {
 
     async runAnimations() {
         this.animacionProfile.play();
+    }
+
+    takePicture = async () => {
+        const image = await Camera.getPhoto({
+            quality: 90,
+            allowEditing: false,
+            resultType: CameraResultType.DataUrl
+        });
+        // image.webPath will contain a path that can be set as an image src.
+        // You can access the original file using image.path, which can be
+        // passed to the Filesystem API to read the raw data of the image,
+        // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+        this.imagen = image.dataUrl;
     }
 }
 
