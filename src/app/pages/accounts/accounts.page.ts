@@ -3,7 +3,6 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
-import { Usuario } from '../interfaces/usuario';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 
 @Component({
@@ -29,6 +28,12 @@ export class AccountsPage implements OnInit {
         }
     ]
 
+    cuenta_seleccionada: any = {
+        id: 0,
+        nombre: "",
+        saldo: "",
+    }
+
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
         this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
@@ -53,24 +58,19 @@ export class AccountsPage implements OnInit {
 
     seleccionarCuenta(id_cuenta: number) {
 
-        let cuenta_seleccionada: Cuenta = {
-            id: 0,
-            nombre: "",
-            saldo: "",
-            fecha_creacion: new Date(),
-            fecha_actualizacion: new Date(),
-            id_usuario: 0
-        }
-
         for(var cuenta in this.arreglo_cuentas){
             if(this.arreglo_cuentas[cuenta].id === id_cuenta){
-                cuenta_seleccionada = this.arreglo_cuentas[cuenta];
+                this.cuenta_seleccionada.id = id_cuenta;
+                this.cuenta_seleccionada.nombre = this.arreglo_cuentas[cuenta].nombre;
+                this.cuenta_seleccionada.saldo = this.arreglo_cuentas[cuenta].saldo;
             }
         }
 
+
         let navigationExtras: NavigationExtras = {
             state: {
-                cuenta_enviada: cuenta_seleccionada
+                usuario: this.usuario,
+                cuenta_enviada: this.cuenta_seleccionada
             }
         }
 

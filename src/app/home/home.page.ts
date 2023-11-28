@@ -16,13 +16,11 @@ export class HomePage {
 
     constructor(private activeRouter: ActivatedRoute, private router: Router) {
 
-        this.usuario = localStorage.getItem('usuario');
-
-        /* this.activeRouter.queryParams.subscribe(params => {
+        this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
                 this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
             }
-        }) */
+        })
     }
 
     goToAccounts() {

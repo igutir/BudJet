@@ -42,12 +42,12 @@ export class CreateMovementPage implements OnInit {
         }
     ]
 
-        id = 0;
-        descripcion = "";
-        monto = "";
-        fecha = new Date();
-        id_cuenta = 0;
-        id_tipo_movimiento = 0;
+    id = 0;
+    descripcion = "";
+    monto = "";
+    fecha = new Date();
+    id_cuenta = 0;
+    id_tipo_movimiento = 0;
 
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
         this.activeRouter.queryParams.subscribe(params => {
@@ -141,9 +141,31 @@ export class CreateMovementPage implements OnInit {
         return (monto_ok && descripcion_ok);
     }
 
+    actualizarSaldoCuenta(){
+
+        let monto_movimiento = parseInt(this.monto);
+        let saldo_cuenta = parseInt(this.cuenta_seleccionada.saldo);
+
+        let nuevo_saldo = 0;
+
+        if(this.id_tipo_movimiento === 1){
+
+            nuevo_saldo = (saldo_cuenta + monto_movimiento);
+        }
+        else{
+            nuevo_saldo = (saldo_cuenta - monto_movimiento);
+        }
+
+        let saldo_final = String(nuevo_saldo);
+
+        this.DBService.updateMontoCuentas(this.cuenta_seleccionada.id, saldo_final);
+    }
+
     ingresoExitoso() {
 
         this.DBService.insertMovimiento(this.descripcion,this.monto,new Date(),this.id_cuenta,this.id_tipo_movimiento);
+
+        this.actualizarSaldoCuenta();
 
         this.goMovements();
     }
@@ -152,6 +174,7 @@ export class CreateMovementPage implements OnInit {
 
         let navigationExtras: NavigationExtras = {
             state: {
+                usuario: this.usuario,
                 cuenta_enviada: this.cuenta_seleccionada
             }
         }

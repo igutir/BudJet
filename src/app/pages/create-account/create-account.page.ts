@@ -24,63 +24,75 @@ export class CreateAccountPage implements OnInit {
         id_usuario: 0,
     }
 
-constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
-    this.activeRouter.queryParams.subscribe(params => {
-        if (this.router.getCurrentNavigation()?.extras?.state) {
-            this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
+    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+        this.activeRouter.queryParams.subscribe(params => {
+            if (this.router.getCurrentNavigation()?.extras?.state) {
+                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
+            }
+        })
+    }
+
+    ngOnInit() {
+    }
+
+    validarIngreso() {
+
+        let nombre_ok = false;
+
+        if (this.nueva_cuenta.nombre.length > 0) {
+            nombre_ok = true;
         }
-    })
-}
-
-ngOnInit() {
-}
-
-validarIngreso() {
-
-    let nombre_ok = false;
-
-    if (this.nueva_cuenta.nombre.length > 0){
-        nombre_ok = true;
-    }
-    else{
-        if(!(this.nueva_cuenta.nombre.length > 0)) this.DBService.presentToast('Nombre vacío');
-    }
-    return nombre_ok;
-}
-
-ingresoExitoso() {
-    if (this.validarIngreso()) {
-
-        this.DBService.insertCuenta(
-            this.nueva_cuenta.nombre,
-            this.nueva_cuenta.saldo,
-            new Date(),
-            new Date(),
-            this.usuario.id,
-        );
-
-        this.DBService.presentToast('Cuenta registrada exitosamente');
-
-        this.goAccounts();
+        else {
+            if (!(this.nueva_cuenta.nombre.length > 0)) this.DBService.presentToast('Nombre vacío');
+        }
+        return nombre_ok;
     }
 
-    else {
+    ingresoExitoso() {
+        if (this.validarIngreso()) {
 
-        this.DBService.presentToast('El nombre no puede estar vacío');
+            this.DBService.insertCuenta(
+                this.nueva_cuenta.nombre,
+                this.nueva_cuenta.saldo,
+                new Date(),
+                new Date(),
+                this.usuario.id,
+            );
 
-    }
-}
+            this.DBService.presentToast('Cuenta registrada exitosamente');
 
-goAccounts() {
+            this.goAccounts();
+        }
 
-    let navigationExtras: NavigationExtras = {
-        state: {
-            usuario: this.usuario
+        else {
+
+            this.DBService.presentToast('El nombre no puede estar vacío');
+
         }
     }
 
-    this.router.navigate(['/accounts'], navigationExtras);
+    goAccounts() {
 
-}
+        let navigationExtras: NavigationExtras = {
+            state: {
+                usuario: this.usuario
+            }
+        }
+
+        this.router.navigate(['/accounts'], navigationExtras);
+
+    }
+
+    goHome() {
+
+        let navigationExtras: NavigationExtras = {
+            state: {
+                usuario: this.usuario
+            }
+        }
+
+        this.router.navigate(['/home'], navigationExtras);
+    }
+
 
 }

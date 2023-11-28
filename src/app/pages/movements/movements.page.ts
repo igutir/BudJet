@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
 import { Movimiento } from '../interfaces/movimiento';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
@@ -12,6 +12,12 @@ import es from '@angular/common/locales/es';
     styleUrls: ['./movements.page.scss'],
 })
 export class MovementsPage implements OnInit {
+
+    usuario: any = {
+        id: 0,
+        nombre: "",
+
+    };
 
     cuenta_consultada: any = {
         id: 0,
@@ -33,6 +39,7 @@ export class MovementsPage implements OnInit {
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
         this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
+                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
                 this.cuenta_consultada = this.router.getCurrentNavigation()?.extras?.state?.['cuenta_enviada'];
             }
         })
@@ -50,5 +57,16 @@ export class MovementsPage implements OnInit {
                 })
             }
         })
+    }
+
+    goHome() {
+
+        let navigationExtras: NavigationExtras = {
+            state: {
+                usuario: this.usuario
+            }
+        }
+
+        this.router.navigate(['/home'], navigationExtras);
     }
 }

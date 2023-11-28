@@ -299,6 +299,19 @@ export class DataBaseServiceService {
             });
     }
 
+    updateMontoCuentas(
+        id: number,
+        saldo: string
+        ){
+            let data = [saldo, id];
+            return this.database.executeSql('UPDATE cuenta SET saldo = ? WHERE id = ?', data).then(data2=> {
+                this.getCuentaById(id);
+            })
+            .catch((e: any) => {
+                this.presentAlert('Error update cuenta: ' + e.message);
+            });
+    }
+
     deleteCuenta(id_usuario: number, id_cuenta: number, movimientos: string[]){
 
         for(var movimiento in movimientos){
