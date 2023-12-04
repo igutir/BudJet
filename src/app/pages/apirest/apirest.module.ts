@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ApirestPageRoutingModule } from './apirest-routing.module';
 
 import { ApirestPage } from './apirest.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ApirestPageRoutingModule
+    ApirestPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [ApirestPage]
 })

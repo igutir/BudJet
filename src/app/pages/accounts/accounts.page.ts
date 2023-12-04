@@ -35,11 +35,16 @@ export class AccountsPage implements OnInit {
     }
 
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
-        this.activeRouter.queryParams.subscribe(params => {
+
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+
+        localStorage.removeItem('cuenta_consultada');
+
+        /* this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
                 this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
             }
-        })
+        }) */
     }
 
     ngOnInit() {
@@ -66,26 +71,50 @@ export class AccountsPage implements OnInit {
             }
         }
 
+        this.goMovements();
+    }
 
-        let navigationExtras: NavigationExtras = {
+    goMovements() {
+
+        localStorage.setItem('cuenta_consultada', JSON.stringify(this.cuenta_seleccionada));
+
+        /* let navigationExtras: NavigationExtras = {
             state: {
                 usuario: this.usuario,
                 cuenta_enviada: this.cuenta_seleccionada
             }
-        }
+        } */
 
-        this.router.navigate(['/movements'], navigationExtras);
+        this.router.navigate(['/movements']/* , navigationExtras */);
     }
 
     goToCreateAccounts() {
 
-        let navigationExtras: NavigationExtras = {
+        /* let navigationExtras: NavigationExtras = {
             state: {
                 usuario: this.usuario
             }
+        } */
+
+        this.router.navigate(['/create-account']/* , navigationExtras */);
+    }
+
+    goUpdateAccount(cuenta: any){
+
+        let navigationExtras: NavigationExtras = {
+            state: {
+                idEnv: cuenta.id,
+                nombreEnv: cuenta.nombre,
+                saldoEnv: cuenta.saldo,
+            }
         }
 
-        this.router.navigate(['/create-account'], navigationExtras);
+        this.router.navigate(['/update_account'] , navigationExtras);
+    }
+
+    goDeleteAccount(cuenta: any){
+        this.DBService.deleteCuenta(this.usuario.id, cuenta.id);
+        this.DBService.presentToast("Cuenta Eliminada");
     }
 
 }

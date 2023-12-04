@@ -42,19 +42,24 @@ export class CreateMovementPage implements OnInit {
         }
     ]
 
-    id = 0;
-    descripcion = "";
-    monto = "";
-    fecha = new Date();
-    id_cuenta = 0;
-    id_tipo_movimiento = 0;
+    nuevo_movimiento: any = {
+    id: 0,
+    descripcion: "",
+    monto: "",
+    fecha: new Date(),
+    id_cuenta: 0,
+    id_tipo_movimiento: 0
+    }
 
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
-        this.activeRouter.queryParams.subscribe(params => {
+
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+
+/*         this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
                 this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
             }
-        })
+        }) */
     }
 
     ngOnInit() {
@@ -81,25 +86,17 @@ export class CreateMovementPage implements OnInit {
             }
         })
 
-        this.DBService.dbState().subscribe(res => {
-            if(res){
-                this.DBService.fetchCuentasPorUsuario().subscribe(item => {
-                    this.arreglo_cuentas = item;
-                })
-            }
-        })
-
     }
 
     setCuenta(cuenta: Cuenta) {
-        this.id_cuenta = cuenta.id;
+        this.nuevo_movimiento.id_cuenta = cuenta.id;
         this.cuenta_seleccionada.id = cuenta.id;
         this.cuenta_seleccionada.nombre = cuenta.nombre;
         this.cuenta_seleccionada.saldo = cuenta.saldo;
     }
 
     setTipoCuenta(tipo: TipoMovimiento) {
-        this.id_tipo_movimiento = tipo.id;
+        this.nuevo_movimiento.id_tipo_movimiento = tipo.id;
     }
 
     esNumerico(texto: string) {
@@ -127,11 +124,11 @@ export class CreateMovementPage implements OnInit {
         let monto_ok = false;
         let descripcion_ok = false;
 
-        if (this.esNumerico(this.monto)){
+        if (this.esNumerico(this.nuevo_movimiento.monto)){
             monto_ok = true;
         }
 
-        if (this.descripcion.length > 0){
+        if (this.nuevo_movimiento.descripcion.length > 0){
             descripcion_ok = true;
         }
         else{
@@ -143,12 +140,12 @@ export class CreateMovementPage implements OnInit {
 
     actualizarSaldoCuenta(){
 
-        let monto_movimiento = parseInt(this.monto);
+        let monto_movimiento = parseInt(this.nuevo_movimiento.monto);
         let saldo_cuenta = parseInt(this.cuenta_seleccionada.saldo);
 
         let nuevo_saldo = 0;
 
-        if(this.id_tipo_movimiento === 1){
+        if(this.nuevo_movimiento.id_tipo_movimiento === 1){
 
             nuevo_saldo = (saldo_cuenta + monto_movimiento);
         }
@@ -163,7 +160,7 @@ export class CreateMovementPage implements OnInit {
 
     ingresoExitoso() {
 
-        this.DBService.insertMovimiento(this.descripcion,this.monto,new Date(),this.id_cuenta,this.id_tipo_movimiento);
+        this.DBService.insertMovimiento(this.nuevo_movimiento.descripcion, this.nuevo_movimiento.monto,new Date(),this.nuevo_movimiento.id_cuenta,this.nuevo_movimiento.id_tipo_movimiento);
 
         this.actualizarSaldoCuenta();
 
@@ -172,25 +169,29 @@ export class CreateMovementPage implements OnInit {
 
     goMovements() {
 
-        let navigationExtras: NavigationExtras = {
+        localStorage.setItem('cuenta_consultada', JSON.stringify(this.cuenta_seleccionada));
+
+        /* let navigationExtras: NavigationExtras = {
             state: {
                 usuario: this.usuario,
                 cuenta_enviada: this.cuenta_seleccionada
             }
-        }
+        } */
 
-        this.router.navigate(['/movements'], navigationExtras);
+        this.router.navigate(['/movements']/* , navigationExtras */);
     }
 
     goHome() {
 
-        let navigationExtras: NavigationExtras = {
+        /* let navigationExtras: NavigationExtras = {
             state: {
                 usuario: this.usuario
             }
-        }
+        } */
 
-        this.router.navigate(['/home'], navigationExtras);
+        this.router.navigate(['/home']/* , navigationExtras */);
     }
+
+    
 
 }

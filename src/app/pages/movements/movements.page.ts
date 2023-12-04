@@ -37,12 +37,17 @@ export class MovementsPage implements OnInit {
     ]
 
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
-        this.activeRouter.queryParams.subscribe(params => {
+
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+
+        this.cuenta_consultada = JSON.parse(localStorage.getItem("cuenta_consultada") || '{}');
+
+        /* this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
                 this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
                 this.cuenta_consultada = this.router.getCurrentNavigation()?.extras?.state?.['cuenta_enviada'];
             }
-        })
+        }) */
     }
 
     ngOnInit() {
@@ -61,12 +66,32 @@ export class MovementsPage implements OnInit {
 
     goHome() {
 
-        let navigationExtras: NavigationExtras = {
+        /* let navigationExtras: NavigationExtras = {
             state: {
                 usuario: this.usuario
             }
+        } */
+
+        this.router.navigate(['/home']/* , navigationExtras */);
+    }
+
+    goUpdateMovement(movimiento: any){
+
+        let navigationExtras: NavigationExtras = {
+            state: {
+                idEnv: movimiento.id,
+                descripcionEnv: movimiento.descripcion,
+                montoEnv: movimiento.monto,
+                id_cuentaEnv: movimiento.id_cuenta,
+                id_tipo_movimientoEnv: movimiento.id_tipo_movimiento,
+            }
         }
 
-        this.router.navigate(['/home'], navigationExtras);
+        this.router.navigate(['/update_movement'] , navigationExtras);
+    }
+
+    goDeleteMovement(movimiento: any){
+        this.DBService.deleteMovimiento(movimiento.id, movimiento.id_cuenta);
+        this.DBService.presentToast("Movimiento Eliminado");
     }
 }

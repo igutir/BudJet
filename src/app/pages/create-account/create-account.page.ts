@@ -25,11 +25,14 @@ export class CreateAccountPage implements OnInit {
     }
 
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+/* 
         this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
                 this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
             }
-        })
+        }) */
     }
 
     ngOnInit() {
@@ -73,25 +76,25 @@ export class CreateAccountPage implements OnInit {
 
     goAccounts() {
 
-        let navigationExtras: NavigationExtras = {
+        /* let navigationExtras: NavigationExtras = {
             state: {
                 usuario: this.usuario
             }
-        }
+        } */
 
-        this.router.navigate(['/accounts'], navigationExtras);
+        this.router.navigate(['/accounts']/* , navigationExtras */);
 
     }
 
     goHome() {
 
-        let navigationExtras: NavigationExtras = {
+        /* let navigationExtras: NavigationExtras = {
             state: {
                 usuario: this.usuario
             }
-        }
+        } */
 
-        this.router.navigate(['/home'], navigationExtras);
+        this.router.navigate(['/home']/* , navigationExtras */);
     }
 
 

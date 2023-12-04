@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { UpdateAccountPageRoutingModule } from './update-account-routing.module';
 
 import { UpdateAccountPage } from './update-account.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    UpdateAccountPageRoutingModule
+    UpdateAccountPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [UpdateAccountPage]
 })

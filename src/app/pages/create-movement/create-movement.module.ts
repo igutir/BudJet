@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { NgFor } from '@angular/common';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { NgFor } from '@angular/common';
     MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
-    NgFor
+    NgFor,
+    ComponentsModule
   ],
   declarations: [CreateMovementPage]
 })

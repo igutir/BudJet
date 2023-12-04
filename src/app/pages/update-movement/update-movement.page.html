@@ -1,13 +1,87 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>update-movement</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>BudJet App</ion-title>
+
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">update-movement</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <div class="ion-padding">
+        <ion-list class="welcome-card">
+            <ion-item>
+                <h1>Modificar movimiento</h1>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <ion-grid class="home-grid">
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Cuenta</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let cuenta of arreglo_cuentas" [value]="cuenta.id"
+                            (click)="setCuenta(cuenta)">
+                            {{cuenta.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Tipo de movimiento</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let tipo of tipos_movimiento" [value]="tipo.id" (click)="setTipoCuenta(tipo)">
+                            {{tipo.descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Monto</mat-label>
+                    <input matInput type="number" min="0" value="[monto]" [(ngModel)]="monto">
+                    <span matTextPrefix>$</span>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Descripción</mat-label>
+                    <input matInput type="text" value="[descripcion]" [(ngModel)]="descripcion">
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <ion-button (click)="actualizarMovimiento()">Actualizar movimiento</ion-button>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
+
 </ion-content>
+
+<app-footer></app-footer>

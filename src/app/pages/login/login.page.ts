@@ -125,21 +125,21 @@ export class LoginPage implements AfterViewInit {
 
     enviarDatos() {
 
-        if (this.validarCredenciales() && this.validarUsuario()) {
+        if (this.validarCredenciales() ) {
 
             console.log("validacion credenciales ok");
 
-            localStorage.setItem('usuario', this.usuarioActual);
+            localStorage.setItem('usuario', JSON.stringify(this.usuarioActual));
 
             this.DBService.presentToast('Login exitoso');
 
-            let navigationExtras: NavigationExtras = {
+            /* let navigationExtras: NavigationExtras = {
                 state: {
                     usuario: this.usuarioActual
                 }
-            }
+            } */
 
-            this.router.navigate(['/home'], navigationExtras);
+            this.router.navigate(['/home']/* , navigationExtras */);
         }
     }
 

@@ -64,6 +64,7 @@ export class DataBaseServiceService {
     obsMovimientoById = new BehaviorSubject([]);
     //TIPOS DE MOVIMIENTO
     observableTipoMovimiento = new BehaviorSubject([]);
+    obsTipoMovimientoById = new BehaviorSubject([]);
 
     private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -282,16 +283,15 @@ export class DataBaseServiceService {
             });
     }
 
-    updateCuentas(
+    updateCuenta(
         id: number,
         nombre: string,
         saldo: string,
-        fecha_creacion: Date,
         fecha_actualizacion: Date,
         id_usuario: number
         ){
-            let data = [nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario, id];
-            return this.database.executeSql('UPDATE cuenta SET nombre = ?, saldo = ?, fecha_creacion = ?, fecha_actualizacion = ?, id_usuario = ? WHERE id = ?', data).then(data2=> {
+            let data = [nombre, saldo, fecha_actualizacion, id_usuario, id];
+            return this.database.executeSql('UPDATE cuenta SET nombre = ?, saldo = ?, fecha_actualizacion = ?, id_usuario = ? WHERE id = ?', data).then(data2=> {
                 this.selectCuentasUsuario(id_usuario);
             })
             .catch((e: any) => {
@@ -312,14 +312,11 @@ export class DataBaseServiceService {
             });
     }
 
-    deleteCuenta(id_usuario: number, id_cuenta: number, movimientos: string[]){
+    deleteCuenta(id_usuario: number, id_cuenta: number){
 
-        for(var movimiento in movimientos){
-
-            this.database.executeSql('DELETE FROM movimiento WHERE id = ?', [movimiento]).then(a=>{
-                this.selectMovimientosCuenta(id_cuenta);
-            })
-        }
+        this.database.executeSql('DELETE FROM movimiento WHERE id_cuenta = ?', [id_cuenta]).then(a=>{
+            this.selectMovimientosCuenta(id_cuenta);
+        });
 
         return this.database.executeSql('DELETE FROM cuenta WHERE id = ?',[id_cuenta]).then(a=>{
             this.selectCuentasUsuario(id_usuario);
@@ -427,12 +424,11 @@ export class DataBaseServiceService {
         id: number,
         descripcion: string,
         monto: string,
-        fecha: Date,
         id_cuenta: number,
-        id_tipo_movimiento: number
+        id_tipo_movimiento: number,
     ){
-        let data = [descripcion, monto, fecha, id_cuenta, id_tipo_movimiento, id];
-            return this.database.executeSql('UPDATE movimiento SET descripcion = ?, monto = ?, fecha = ?, id_cuenta = ?, id_tipo_movimiento = ? WHERE id = ?', data).then(data2=> {
+        let data = [descripcion, monto, id_cuenta, id_tipo_movimiento, id];
+            return this.database.executeSql('UPDATE movimiento SET descripcion = ?, monto = ?, id_cuenta = ?, id_tipo_movimiento = ? WHERE id = ?', data).then(data2=> {
                 this.selectMovimientosCuenta(id_cuenta);
             }).catch((e: any) => {
                 this.presentAlert('Error update movimiento: ' + e.message);
@@ -469,6 +465,28 @@ export class DataBaseServiceService {
     fetchTiposMovimiento(): Observable<TipoMovimiento[]>{
         return this.observableTipoMovimiento.asObservable();
     }
+
+    getTipoMovimientoById(id_tipo_movimiento: number) {
+        return this.database.executeSql('SELECT * FROM tipo_movimiento WHERE id = ?', [id_tipo_movimiento]).then(res => {
+            let items: TipoMovimiento[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    items.push({
+                        id: res.rows.item(i).id,
+                        descripcion: res.rows.item(i).descripcion
+                    })
+                }
+            }
+
+            this.obsTipoMovimientoById.next(items as any);
+
+        })
+    }
+
+    fetchTipoMovimientoById(): Observable<Movimiento[]> {
+        return this.obsTipoMovimientoById.asObservable();
+    }
+
 
     //Funciones BD
     async presentToast(msj: string) {

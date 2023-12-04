@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { UpdateMovementPageRoutingModule } from './update-movement-routing.module';
 
 import { UpdateMovementPage } from './update-movement.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    UpdateMovementPageRoutingModule
+    UpdateMovementPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [UpdateMovementPage]
 })

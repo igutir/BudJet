@@ -9,6 +9,8 @@ import { Usuario } from '../pages/interfaces/usuario';
 })
 export class HomePage {
 
+
+
     usuario: any = {
         id: 0,
         nombre: "",
@@ -16,11 +18,16 @@ export class HomePage {
 
     constructor(private activeRouter: ActivatedRoute, private router: Router) {
 
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+
+        localStorage.removeItem('cuenta_consultada');
+/*
         this.activeRouter.queryParams.subscribe(params => {
             if (this.router.getCurrentNavigation()?.extras?.state) {
                 this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
             }
-        })
+        }) */
+        
     }
 
     goToAccounts() {

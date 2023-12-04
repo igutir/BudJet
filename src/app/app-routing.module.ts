@@ -48,14 +48,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/update-account/update-account.module').then( m => m.UpdateAccountPageModule)
   },
   {
-    path: 'delete-movement',
-    loadChildren: () => import('./pages/delete-movement/delete-movement.module').then( m => m.DeleteMovementPageModule)
-  },
-  {
-    path: 'delete-account',
-    loadChildren: () => import('./pages/delete-account/delete-account.module').then( m => m.DeleteAccountPageModule)
-  },
-  {
     path: 'apirest',
     loadChildren: () => import('./pages/apirest/apirest.module').then( m => m.ApirestPageModule)
   },
