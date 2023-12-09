@@ -109,7 +109,7 @@ export class AccountsPage implements OnInit {
             }
         }
 
-        this.router.navigate(['/update_account'] , navigationExtras);
+        this.router.navigate(['/update-account'] , navigationExtras);
     }
 
     goDeleteAccount(cuenta: any){

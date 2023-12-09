@@ -59,7 +59,7 @@
             <ion-col>
                 <mat-form-field>
                     <mat-label>Monto</mat-label>
-                    <input matInput type="number" min="0" [(ngModel)]="monto">
+                    <input matInput type="number" min="0" [(ngModel)]="nuevo_movimiento.monto">
                     <span matTextPrefix>$</span>
                 </mat-form-field>
             </ion-col>
@@ -69,7 +69,7 @@
             <ion-col>
                 <mat-form-field>
                     <mat-label>Descripción</mat-label>
-                    <input matInput type="text" [(ngModel)]="descripcion">
+                    <input matInput type="text" [(ngModel)]="nuevo_movimiento.descripcion">
                 </mat-form-field>
             </ion-col>
         </ion-row>

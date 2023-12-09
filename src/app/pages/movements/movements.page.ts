@@ -87,7 +87,7 @@ export class MovementsPage implements OnInit {
             }
         }
 
-        this.router.navigate(['/update_movement'] , navigationExtras);
+        this.router.navigate(['/update-movement'] , navigationExtras);
     }
 
     goDeleteMovement(movimiento: any){

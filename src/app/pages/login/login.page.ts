@@ -1,9 +1,10 @@
 import { OnInit, AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import type { Animation } from  '@ionic/angular'
-import { AnimationController, IonList } from  '@ionic/angular'
+import type { Animation } from '@ionic/angular'
+import { AnimationController, IonList } from '@ionic/angular'
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 import { Usuario } from '../interfaces/usuario';
+import { UsuarioSimple } from '../interfaces/usuario_simple';
 
 @Component({
     selector: 'app-login',
@@ -12,13 +13,22 @@ import { Usuario } from '../interfaces/usuario';
 })
 export class LoginPage implements AfterViewInit {
 
-    @ViewChild(IonList, {read: ElementRef}) titulo!: ElementRef<HTMLIonListElement>;
+    @ViewChild(IonList, { read: ElementRef }) titulo!: ElementRef<HTMLIonListElement>;
 
-    usuariosRegistrados: Usuario[] = [
+    usuarioActual: UsuarioSimple = {
+        id: 0,
+        nombre: ""
+    }
+
+    password = "";
+
+    validacion_credenciales = false;
+    autenticacion = false;
+
+    authUsuario: Usuario[] = [
         {
             id: 0,
             nombre: "",
-            password: "",
             email: "",
             telefono: "",
             fecha_nacimiento: new Date(),
@@ -27,12 +37,7 @@ export class LoginPage implements AfterViewInit {
         }
     ]
 
-    usuarioActual: any = {
-        id: 0,
-        nombre: ""
-    }
-
-    password = "";
+    usuarios_simples: UsuarioSimple[] = [];
 
     private animation!: Animation;
 
@@ -40,12 +45,12 @@ export class LoginPage implements AfterViewInit {
 
     ngAfterViewInit() {
 
-        localStorage.removeItem('usuario');
+        localStorage.clear();
 
         this.DBService.dbState().subscribe(res => {
-            if(res){
-                this.DBService.fetchUsuarios().subscribe(item => {
-                    this.usuariosRegistrados = item;
+            if (res) {
+                this.DBService.fetchUsuariosSimples().subscribe(item => {
+                    this.usuarios_simples = item;
                 })
             }
         })
@@ -90,42 +95,84 @@ export class LoginPage implements AfterViewInit {
     validarCredenciales() {
         let validacion_usuario = false;
         let validacion_password = false;
+        this.validacion_credenciales = false;
 
         if (this.alfanumerico(this.usuarioActual.nombre) && this.usuarioActual.nombre.length >= 3 && this.usuarioActual.nombre.length <= 8) validacion_usuario = true;
 
         if (this.numerico(this.password) && this.password.length === 4) validacion_password = true;
 
-        if (validacion_usuario && validacion_password){
-            return true;
+        if (validacion_usuario && validacion_password) {
+            this.validacion_credenciales = true;
 
+        }
+        else {
+            this.DBService.presentAlert('Credenciales inválidas');
+        }
+    }
+
+
+    /*  validarUsuario() {
+
+        this.autenticacion = false;
+
+        console.log(JSON.stringify(this.authUsuario));
+
+        this.DBService.autenticarUsuario(this.usuarioActual.nombre, this.password);
+
+        console.log(JSON.stringify(this.authUsuario));
+
+        if(this.authUsuario[0].id !== 0){
+            console.log("comparacion: " + (this.authUsuario[0].id !== 0));
+
+            console.log("id: " + this.authUsuario[0].id + " | tipo: " + typeof(this.authUsuario[0].id));
+
+            this.usuarioActual.id = this.authUsuario[0].id;
+
+            this.autenticacion = true;
+        }
+
+        console.log("NO IF---");
+    } */
+
+    async autenticarUsuarioSimple(){
+
+        let usuario: any = {
+            id: 0,
+            nombre: ""
+        };
+
+        usuario = await this.DBService.autenticarUsuario(this.usuarioActual.nombre, this.password);
+
+ /*        usuario = this.getUsuarioSimple(); */
+
+        console.log("usuario autenticado " + JSON.stringify(usuario));
+
+        if(usuario.id === 0){
+
+            console.log("No definido, consulta no trae datos al arreglo / Usuario no encontrado");
+
+            console.log("usuario autenticado? " + JSON.stringify(usuario));
         }
         else{
-            this.DBService.presentAlert('Credenciales inválidas');
-            return false;
+            this.usuarioActual.id = usuario.id;
+            this.usuarioActual.nombre = usuario.nombre;
+
+            console.log("usuario autenticado ELSE" + JSON.stringify(usuario));
+            console.log("usuario actual " + JSON.stringify(this.usuarioActual));
+
+            this.autenticacion = true;
         }
     }
 
+    async enviarDatos() {
 
-    validarUsuario(){
-        for(let i=0; i< this.usuariosRegistrados.length; i++){
-            if(this.usuariosRegistrados[i].nombre === this.usuarioActual.nombre){
-                if(this.usuariosRegistrados[i].password === this.password){
-                    this.usuarioActual.id = this.usuariosRegistrados[i].id
-                    return true;
-                }
-                else{
-                    this.DBService.presentAlert('Contraseña incorrecta');
-                }
-            }
-        }
-        this.DBService.presentAlert('Usuario no encontrado');
+        this.validarCredenciales();
 
-        return false;
-    }
+        /* this.validarUsuario(); */
 
-    enviarDatos() {
+        await this.autenticarUsuarioSimple();
 
-        if (this.validarCredenciales() ) {
+        if (this.validacion_credenciales && this.autenticacion) {
 
             console.log("validacion credenciales ok");
 
@@ -143,12 +190,36 @@ export class LoginPage implements AfterViewInit {
         }
     }
 
-    goToRegister(){
+    goToRegister() {
         this.router.navigate(['/register']);
     }
 
-    goToApi(){
+    goToApi() {
         this.router.navigate(['/apirest']);
     }
+
+    A(){
+        console.log("A || credenciales validas?: " + this.validacion_credenciales + " | " + "usuario autenticado?: " + this.autenticacion);
+    }
+
+    B(){
+
+        console.log("B || Largo del arreglo de usuarios: " + this.authUsuario.length +"");
+
+        for(var i = 0; i < this.authUsuario.length; i++){
+            console.log("B || Usuario AUTH ID: " + this.authUsuario[i].id + " | " + "Usuario AUTH Nombre: " + this.authUsuario[i].nombre);
+        }
+    }
+
+    C(){
+        console.log("C || Usuario actual ID: " + this.usuarioActual.id + " | " + "Usuario actual Nombre: " + this.usuarioActual.nombre);
+    }
+
+   
+
+/*     getUsuarioSimple(){
+        
+        return usuarios;
+    } */
 
 }
