@@ -21,17 +21,20 @@
 			<ion-row class="ion-justify-content-center">
 				<ion-col size="auto">
 
-					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" required [(ngModel)]="user.username"></ion-input>
+					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" required [(ngModel)]="usuario_actual.nombre"></ion-input>
 
-					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" value="password" required [(ngModel)]="user.password"></ion-input>
+					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" placeholder="password" required [(ngModel)]="password"></ion-input>
 
-                    <ion-input class="loginForm" label="Email: " labelPlacement="stacked" type="email" placeholder="usuario@budjet.cl" required [(ngModel)]="user.email"></ion-input>
+                    <ion-input class="loginForm" label="Email: " labelPlacement="stacked" type="email" placeholder="usuario@budjet.cl" required [(ngModel)]="usuario_actual.email"></ion-input>
 
-                    <ion-input class="loginForm" label="Telefono: " labelPlacement="stacked" type="tel" placeholder="912345678" required [(ngModel)]="user.telefono"></ion-input>
+                    <ion-input class="loginForm" label="Telefono: " labelPlacement="stacked" type="tel" placeholder="912345678" required [(ngModel)]="usuario_actual.telefono"></ion-input>
+
+                    <ion-toggle [enableOnOffLabels]="true" [checked]="true" (ionChange)="cambiarToggleNotificaciones()"> Recibir notificaciones </ion-toggle>
 
                 </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-center">
+                <ion-button (click)="goToLogin()">Volver al login</ion-button>
                 <ion-button (click)="enviarDatos()">Registrarse</ion-button>
 			</ion-row>
             <br>

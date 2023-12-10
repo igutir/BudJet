@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { Cuenta } from '../interfaces/cuenta';
 import { Movimiento } from '../interfaces/movimiento';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 import { registerLocaleData } from '@angular/common';
@@ -16,7 +15,6 @@ export class MovementsPage implements OnInit {
     usuario: any = {
         id: 0,
         nombre: "",
-
     };
 
     cuenta_consultada: any = {
@@ -41,13 +39,6 @@ export class MovementsPage implements OnInit {
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 
         this.cuenta_consultada = JSON.parse(localStorage.getItem("cuenta_consultada") || '{}');
-
-        /* this.activeRouter.queryParams.subscribe(params => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-                this.cuenta_consultada = this.router.getCurrentNavigation()?.extras?.state?.['cuenta_enviada'];
-            }
-        }) */
     }
 
     ngOnInit() {
@@ -66,13 +57,7 @@ export class MovementsPage implements OnInit {
 
     goHome() {
 
-        /* let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        } */
-
-        this.router.navigate(['/home']/* , navigationExtras */);
+        this.router.navigate(['/home']);
     }
 
     goUpdateMovement(movimiento: any){

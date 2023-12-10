@@ -15,7 +15,7 @@ export class LoginPage implements AfterViewInit {
 
     @ViewChild(IonList, { read: ElementRef }) titulo!: ElementRef<HTMLIonListElement>;
 
-    usuarioActual: UsuarioSimple = {
+    usuarioActual: any = {
         id: 0,
         nombre: ""
     }
@@ -24,18 +24,6 @@ export class LoginPage implements AfterViewInit {
 
     validacion_credenciales = false;
     autenticacion = false;
-
-    authUsuario: Usuario[] = [
-        {
-            id: 0,
-            nombre: "",
-            email: "",
-            telefono: "",
-            fecha_nacimiento: new Date(),
-            imagen_perfil: "",
-            notificaciones: false
-        }
-    ]
 
     usuarios_simples: UsuarioSimple[] = [];
 
@@ -47,13 +35,13 @@ export class LoginPage implements AfterViewInit {
 
         localStorage.clear();
 
-        this.DBService.dbState().subscribe(res => {
+  /*       this.DBService.dbState().subscribe(res => {
             if (res) {
                 this.DBService.fetchUsuariosSimples().subscribe(item => {
                     this.usuarios_simples = item;
                 })
             }
-        })
+        }) */
 
         this.animation = this.animationCtrl
             .create()
@@ -64,7 +52,6 @@ export class LoginPage implements AfterViewInit {
             .fromTo("opacity", 0.2, 1);
 
         this.animation.play();
-
     }
 
     numerico(texto: string) {
@@ -110,31 +97,9 @@ export class LoginPage implements AfterViewInit {
         }
     }
 
-
-    /*  validarUsuario() {
+    async autenticarUsuarioSimple(){
 
         this.autenticacion = false;
-
-        console.log(JSON.stringify(this.authUsuario));
-
-        this.DBService.autenticarUsuario(this.usuarioActual.nombre, this.password);
-
-        console.log(JSON.stringify(this.authUsuario));
-
-        if(this.authUsuario[0].id !== 0){
-            console.log("comparacion: " + (this.authUsuario[0].id !== 0));
-
-            console.log("id: " + this.authUsuario[0].id + " | tipo: " + typeof(this.authUsuario[0].id));
-
-            this.usuarioActual.id = this.authUsuario[0].id;
-
-            this.autenticacion = true;
-        }
-
-        console.log("NO IF---");
-    } */
-
-    async autenticarUsuarioSimple(){
 
         let usuario: any = {
             id: 0,
@@ -143,22 +108,13 @@ export class LoginPage implements AfterViewInit {
 
         usuario = await this.DBService.autenticarUsuario(this.usuarioActual.nombre, this.password);
 
- /*        usuario = this.getUsuarioSimple(); */
-
-        console.log("usuario autenticado " + JSON.stringify(usuario));
-
         if(usuario.id === 0){
 
-            console.log("No definido, consulta no trae datos al arreglo / Usuario no encontrado");
-
-            console.log("usuario autenticado? " + JSON.stringify(usuario));
+            this.DBService.presentAlert("Usuario no encontrado");
         }
         else{
             this.usuarioActual.id = usuario.id;
             this.usuarioActual.nombre = usuario.nombre;
-
-            console.log("usuario autenticado ELSE" + JSON.stringify(usuario));
-            console.log("usuario actual " + JSON.stringify(this.usuarioActual));
 
             this.autenticacion = true;
         }
@@ -168,25 +124,15 @@ export class LoginPage implements AfterViewInit {
 
         this.validarCredenciales();
 
-        /* this.validarUsuario(); */
-
         await this.autenticarUsuarioSimple();
 
         if (this.validacion_credenciales && this.autenticacion) {
-
-            console.log("validacion credenciales ok");
 
             localStorage.setItem('usuario', JSON.stringify(this.usuarioActual));
 
             this.DBService.presentToast('Login exitoso');
 
-            /* let navigationExtras: NavigationExtras = {
-                state: {
-                    usuario: this.usuarioActual
-                }
-            } */
-
-            this.router.navigate(['/home']/* , navigationExtras */);
+            this.router.navigate(['/home']);
         }
     }
 
@@ -197,29 +143,5 @@ export class LoginPage implements AfterViewInit {
     goToApi() {
         this.router.navigate(['/apirest']);
     }
-
-    A(){
-        console.log("A || credenciales validas?: " + this.validacion_credenciales + " | " + "usuario autenticado?: " + this.autenticacion);
-    }
-
-    B(){
-
-        console.log("B || Largo del arreglo de usuarios: " + this.authUsuario.length +"");
-
-        for(var i = 0; i < this.authUsuario.length; i++){
-            console.log("B || Usuario AUTH ID: " + this.authUsuario[i].id + " | " + "Usuario AUTH Nombre: " + this.authUsuario[i].nombre);
-        }
-    }
-
-    C(){
-        console.log("C || Usuario actual ID: " + this.usuarioActual.id + " | " + "Usuario actual Nombre: " + this.usuarioActual.nombre);
-    }
-
-   
-
-/*     getUsuarioSimple(){
-        
-        return usuarios;
-    } */
 
 }

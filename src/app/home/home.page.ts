@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { Usuario } from '../pages/interfaces/usuario';
+import { DataBaseServiceService } from '../services/data-base-service.service';
 
 @Component({
     selector: 'app-home',
@@ -9,25 +10,19 @@ import { Usuario } from '../pages/interfaces/usuario';
 })
 export class HomePage {
 
-
-
     usuario: any = {
         id: 0,
         nombre: "",
     };
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router) {
+    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 
         localStorage.removeItem('cuenta_consultada');
-/*
-        this.activeRouter.queryParams.subscribe(params => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-            }
-        }) */
-        
+
+        this.DBService.actualizarSaldos(this.usuario.id);
+
     }
 
     goToAccounts() {

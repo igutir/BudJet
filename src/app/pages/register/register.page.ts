@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ViewChildren, ViewChild, ElementRef } from '@
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Animation, AnimationController, IonList } from '@ionic/angular'
+import { Usuario } from '../interfaces/usuario';
+import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 
 @Component({
     selector: 'app-register',
@@ -11,16 +13,21 @@ import { Animation, AnimationController, IonList } from '@ionic/angular'
 export class RegisterPage implements AfterViewInit {
     @ViewChild(IonList, {read: ElementRef}) titulo!: ElementRef<HTMLIonListElement>;
 
-    user = {
-        username: "",
-        password: "",
+    usuario_actual: Usuario = {
+        id: 0,
+        nombre: "",
         email: "",
-        telefono: ""
+        telefono: "",
+        fecha_nacimiento: new Date(),
+        imagen_perfil: "",
+        notificaciones: true
     }
+
+    password = "";
 
     private animation!: Animation;
 
-    constructor(private router: Router, public alertController: AlertController, private animationCtrl: AnimationController) { }
+    constructor(private router: Router, public alertController: AlertController, private animationCtrl: AnimationController, private DBService: DataBaseServiceService) { }
 
     ngAfterViewInit() {
         this.animation = this.animationCtrl
@@ -85,19 +92,23 @@ export class RegisterPage implements AfterViewInit {
         }
     }
 
+    cambiarToggleNotificaciones(){
+        this.usuario_actual.notificaciones =  !this.usuario_actual.notificaciones;
+    }
+
     validarCredenciales() {
         let validacion_usuario = false;
         let validacion_password = false;
         let validacion_email = false;
         let validacion_telefono = false;
 
-        if (this.alfanumerico(this.user.username) && this.user.username.length >= 3 && this.user.username.length <= 8) validacion_usuario = true;
+        if (this.alfanumerico(this.usuario_actual.nombre) && this.usuario_actual.nombre.length >= 3 && this.usuario_actual.nombre.length <= 8) validacion_usuario = true;
 
-        if (this.numerico(this.user.password) && this.user.password.length === 4) validacion_password = true;
+        if (this.numerico(this.password) && this.password.length === 4) validacion_password = true;
 
-        if(this.validarEmail(this.user.email) && this.user.email.length > 0) validacion_email = true;
+        if(this.validarEmail(this.usuario_actual.email) && this.usuario_actual.email.length > 0) validacion_email = true;
 
-        if (this.validarTelefono(this.user.telefono)) validacion_telefono = true;
+        if (this.validarTelefono(this.usuario_actual.telefono)) validacion_telefono = true;
 
         return (validacion_usuario && validacion_password && validacion_email && validacion_telefono);
     }
@@ -106,37 +117,21 @@ export class RegisterPage implements AfterViewInit {
 
         if (this.validarCredenciales()) {
 
-            console.log("validacion credenciales ok")
+            await this.DBService.insertUsuario(this.usuario_actual.nombre, this.password,  this.usuario_actual.email, this.usuario_actual.telefono, this.usuario_actual.fecha_nacimiento, "", this.usuario_actual.notificaciones);
 
-            let navigationExtras: NavigationExtras = {
-                state: {
-                    user: this.user
-                }
-            }
+            this.DBService.presentAlert("Usuario registrado correctamente");
 
-            const alert = await this.alertController.create({
-                header: 'Registro satisfactorio',
-                message: 'Su usuario fue correctamente registrado',
-                buttons: ['OK']
-            });
-
-            await alert.present();
-
-            this.router.navigate(['/home'], navigationExtras);
+            this.router.navigate(['/login']);
         }
 
         else {
-            console.log("Credenciales invalidas");
 
-            const alert = await this.alertController.create({
-                header: 'Error',
-                message: 'Las credenciales ingresadas no son correctas',
-                buttons: ['OK']
-            });
-
-            await alert.present();
-
+            this.DBService.presentAlert("Los datos no son validos para el registro");
         }
+    }
+
+    goToLogin() {
+        this.router.navigate(['/login']);
     }
 
 }

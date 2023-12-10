@@ -39,12 +39,6 @@ export class AccountsPage implements OnInit {
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 
         localStorage.removeItem('cuenta_consultada');
-
-        /* this.activeRouter.queryParams.subscribe(params => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-            }
-        }) */
     }
 
     ngOnInit() {
@@ -59,6 +53,7 @@ export class AccountsPage implements OnInit {
                 })
             }
         })
+
     }
 
     seleccionarCuenta(id_cuenta: number) {
@@ -78,25 +73,12 @@ export class AccountsPage implements OnInit {
 
         localStorage.setItem('cuenta_consultada', JSON.stringify(this.cuenta_seleccionada));
 
-        /* let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario,
-                cuenta_enviada: this.cuenta_seleccionada
-            }
-        } */
-
-        this.router.navigate(['/movements']/* , navigationExtras */);
+        this.router.navigate(['/movements']);
     }
 
     goToCreateAccounts() {
 
-        /* let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        } */
-
-        this.router.navigate(['/create-account']/* , navigationExtras */);
+        this.router.navigate(['/create-account']);
     }
 
     goUpdateAccount(cuenta: any){

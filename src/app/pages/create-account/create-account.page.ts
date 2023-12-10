@@ -27,40 +27,31 @@ export class CreateAccountPage implements OnInit {
     constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
-/* 
-        this.activeRouter.queryParams.subscribe(params => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-            }
-        }) */
+
     }
 
     ngOnInit() {
     }
 
-    validarIngreso() {
-
-        let nombre_ok = false;
+    async ingresoExitoso() {
 
         if (this.nueva_cuenta.nombre.length > 0) {
-            nombre_ok = true;
-        }
-        else {
-            if (!(this.nueva_cuenta.nombre.length > 0)) this.DBService.presentToast('Nombre vacío');
-        }
-        return nombre_ok;
-    }
 
-    ingresoExitoso() {
-        if (this.validarIngreso()) {
-
-            this.DBService.insertCuenta(
+            await this.DBService.insertCuenta(
                 this.nueva_cuenta.nombre,
                 this.nueva_cuenta.saldo,
                 new Date(),
                 new Date(),
                 this.usuario.id,
             );
+
+            if(parseInt(this.nueva_cuenta.saldo) > 0){
+
+                let id_cuenta = await this.DBService.ultimaCuentaCreada(this.usuario.id);
+
+                await this.DBService.insertMovimiento("Saldo inicial", this.nueva_cuenta.saldo, new Date(), id_cuenta, 1);
+
+            }
 
             this.DBService.presentToast('Cuenta registrada exitosamente');
 
@@ -69,33 +60,19 @@ export class CreateAccountPage implements OnInit {
 
         else {
 
-            this.DBService.presentToast('El nombre no puede estar vacío');
+            this.DBService.presentAlert("Campos con valores inválidos");
 
         }
     }
 
     goAccounts() {
 
-        /* let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        } */
-
-        this.router.navigate(['/accounts']/* , navigationExtras */);
-
+        this.router.navigate(['/accounts']);
     }
 
     goHome() {
 
-        /* let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        } */
-
-        this.router.navigate(['/home']/* , navigationExtras */);
+        this.router.navigate(['/home']);
     }
-
 
 }
