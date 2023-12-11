@@ -60,6 +60,11 @@ export class MovementsPage implements OnInit {
         this.router.navigate(['/home']);
     }
 
+    goToCreateMovements() {
+
+        this.router.navigate(['/create-movement']);
+    }
+
     goUpdateMovement(movimiento: any){
 
         let navigationExtras: NavigationExtras = {
@@ -76,6 +81,9 @@ export class MovementsPage implements OnInit {
     }
 
     goDeleteMovement(movimiento: any){
+
+        this.DBService.updateMontoCuentas(this.cuenta_consultada.id, String(this.cuenta_consultada.saldo - movimiento.monto));
+
         this.DBService.deleteMovimiento(movimiento.id, movimiento.id_cuenta);
         this.DBService.presentToast("Movimiento Eliminado");
     }

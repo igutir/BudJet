@@ -39,7 +39,7 @@
                     <ion-label>{{movimiento.descripcion}}</ion-label>
                     <ion-label *ngIf="movimiento.id_tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
                         number:'1.0-0':'es'}}</ion-label>
-                    <ion-label *ngIf="movimiento.id_tipo_movimiento === 2" slot="end"> - $ {{movimiento.monto |
+                    <ion-label *ngIf="movimiento.id_tipo_movimiento === 2" slot="end">$ {{movimiento.monto |
                         number:'1.0-0':'es'}}</ion-label>
                 </ion-item>
 
@@ -58,13 +58,10 @@
         </ion-list>
     </div>
 
-    <ion-grid>
-        <ion-row>
-            <ion-col>
-                <ion-button (click)="goHome()">Volver al Inicio</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-row class="ion-justify-content-center">
+            <ion-button (click)="goToCreateMovements()">Nuevo movimiento</ion-button>
+            <ion-button (click)="goHome()">Volver al Inicio</ion-button>
+    </ion-row>
 
 </ion-content>
 

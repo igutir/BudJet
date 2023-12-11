@@ -53,7 +53,6 @@ export class AccountsPage implements OnInit {
                 })
             }
         })
-
     }
 
     seleccionarCuenta(id_cuenta: number) {

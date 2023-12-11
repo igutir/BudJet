@@ -6,7 +6,16 @@
             <ion-back-button></ion-back-button>
         </ion-buttons>
 
-        <ion-title>BudJet App</ion-title>
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-title [routerDirection]="'root'" [routerLink]="'/home'">
+                        BudJet App
+                        <ion-icon slot="end" name="home"></ion-icon>
+                    </ion-title>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
 
     </ion-toolbar>
 </ion-header>

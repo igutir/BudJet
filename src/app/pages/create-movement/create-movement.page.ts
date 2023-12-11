@@ -93,9 +93,11 @@ export class CreateMovementPage implements OnInit {
 
     esNumerico(texto: string) {
 
-        if (texto.replace(/[0-9]/g, "") === "") {
+        let monto = String(texto);
 
-            if(texto !== "0"){
+        if (monto.replace(/[0-9]/g, "") === "") {
+
+            if(monto !== "0"){
                 return true;
             }
             else{
@@ -128,7 +130,7 @@ export class CreateMovementPage implements OnInit {
         return (monto_ok && descripcion_ok);
     }
 
-    /* actualizarSaldoCuenta(){
+    actualizarSaldoCuenta(){
 
         let monto_movimiento = parseInt(this.nuevo_movimiento.monto);
         let saldo_cuenta = parseInt(this.cuenta_seleccionada.saldo);
@@ -146,17 +148,20 @@ export class CreateMovementPage implements OnInit {
         let saldo_final = String(nuevo_saldo);
 
         this.DBService.updateMontoCuentas(this.cuenta_seleccionada.id, saldo_final);
-    } */
+    }
 
     ingresoExitoso() {
 
         if(this.validarIngreso()){
 
-            this.nuevo_movimiento.monto = "-" +  this.nuevo_movimiento.monto;
+            if(this.nuevo_movimiento.id_tipo_movimiento === 2){
+
+                this.nuevo_movimiento.monto = "-" +  this.nuevo_movimiento.monto;
+            }
 
             this.DBService.insertMovimiento(this.nuevo_movimiento.descripcion, this.nuevo_movimiento.monto,new Date(),this.nuevo_movimiento.id_cuenta,this.nuevo_movimiento.id_tipo_movimiento);
 
-/*             this.actualizarSaldoCuenta(); */
+            this.actualizarSaldoCuenta();
 
             this.goMovements();
         }

@@ -35,14 +35,6 @@ export class LoginPage implements AfterViewInit {
 
         localStorage.clear();
 
-  /*       this.DBService.dbState().subscribe(res => {
-            if (res) {
-                this.DBService.fetchUsuariosSimples().subscribe(item => {
-                    this.usuarios_simples = item;
-                })
-            }
-        }) */
-
         this.animation = this.animationCtrl
             .create()
             .addElement(this.titulo.nativeElement)

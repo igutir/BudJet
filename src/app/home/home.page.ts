@@ -21,41 +21,28 @@ export class HomePage {
 
         localStorage.removeItem('cuenta_consultada');
 
-        this.DBService.actualizarSaldos(this.usuario.id);
+        this.actualizarSaldosUsuario();
 
+    }
+
+    async actualizarSaldosUsuario(){
+        await this.DBService.actualizarSaldos(this.usuario.id);
+        console.log("saldos actualizados en la bd...")
     }
 
     goToAccounts() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        }
-
-        this.router.navigate(['/accounts'], navigationExtras);
+        this.router.navigate(['/accounts']);
     }
 
     goToCreateMovements() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        }
-
-        this.router.navigate(['/create-movement'], navigationExtras);
+        this.router.navigate(['/create-movement']);
     }
 
     goToCreateAccounts() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        }
-
-        this.router.navigate(['/create-account'], navigationExtras);
+        this.router.navigate(['/create-account']);
     }
 
 }
