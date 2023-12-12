@@ -1,13 +1,58 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>update-account</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>BudJet App</ion-title>
+
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">update-account</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <div class="ion-padding">
+        <ion-list class="title-card">
+            <ion-item>
+                <h1>Modificar cuenta</h1>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <ion-grid class="form">
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Nombre de la cuenta</mat-label>
+                    <input matInput type="text" required [(ngModel)]="nombre">
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <mat-form-field>
+                    <mat-label>Saldo inicial</mat-label>
+                    <input matInput type="number" placeholder="0" min="0" required [(ngModel)]="saldo">
+                    <span matTextPrefix>$</span>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+            <ion-button (click)="actualizarCuenta()">Actualizar cuenta</ion-button>
+        </ion-row>
+
+    </ion-grid>
+
 </ion-content>
+
+<app-footer></app-footer>

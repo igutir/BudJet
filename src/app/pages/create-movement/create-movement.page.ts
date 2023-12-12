@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { Router } from '@angular/router';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 import { Cuenta } from '../interfaces/cuenta';
-import { Movimiento } from '../interfaces/movimiento';
 import { TipoMovimiento } from '../interfaces/tipo_movimiento';
 
 @Component({
@@ -14,8 +13,7 @@ export class CreateMovementPage implements OnInit {
 
     usuario: any = {
         id: 0,
-        nombre: "",
-
+        nombre: ""
     };
 
     arreglo_cuentas: Cuenta[] = [
@@ -32,7 +30,7 @@ export class CreateMovementPage implements OnInit {
     cuenta_seleccionada: any = {
         id: 0,
         nombre: "",
-        saldo: "",
+        saldo: ""
     }
 
     tipos_movimiento: TipoMovimiento[] = [
@@ -42,19 +40,18 @@ export class CreateMovementPage implements OnInit {
         }
     ]
 
-    id = 0;
-    descripcion = "";
-    monto = "";
-    fecha = new Date();
-    id_cuenta = 0;
-    id_tipo_movimiento = 0;
+    nuevo_movimiento: any = {
+    id: 0,
+    descripcion: "",
+    monto: "",
+    fecha: new Date(),
+    id_cuenta: 0,
+    id_tipo_movimiento: 0
+    }
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
-        this.activeRouter.queryParams.subscribe(params => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-            }
-        })
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
+
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
     }
 
     ngOnInit() {
@@ -81,57 +78,49 @@ export class CreateMovementPage implements OnInit {
             }
         })
 
-        this.DBService.dbState().subscribe(res => {
-            if(res){
-                this.DBService.fetchCuentasPorUsuario().subscribe(item => {
-                    this.arreglo_cuentas = item;
-                })
-            }
-        })
-
     }
 
     setCuenta(cuenta: Cuenta) {
-        this.id_cuenta = cuenta.id;
+        this.nuevo_movimiento.id_cuenta = cuenta.id;
         this.cuenta_seleccionada.id = cuenta.id;
         this.cuenta_seleccionada.nombre = cuenta.nombre;
         this.cuenta_seleccionada.saldo = cuenta.saldo;
     }
 
     setTipoCuenta(tipo: TipoMovimiento) {
-        this.id_tipo_movimiento = tipo.id;
+        this.nuevo_movimiento.id_tipo_movimiento = tipo.id;
     }
 
     esNumerico(texto: string) {
 
-        if (texto.replace(/[0-9]/g, "") === "") {
+        let monto = String(texto);
 
-            if(texto !== "0"){
+        if (monto.replace(/[0-9]/g, "") === "") {
+
+            if(monto !== "0"){
                 return true;
             }
             else{
                 this.DBService.presentAlert("El monto no puede ser cero");
                 return false;
             }
-
         }
 
         else {
             this.DBService.presentAlert("No es numerico");
             return false;
         }
-
     }
 
     validarIngreso() {
         let monto_ok = false;
         let descripcion_ok = false;
 
-        if (this.esNumerico(this.monto)){
+        if (this.esNumerico(this.nuevo_movimiento.monto)){
             monto_ok = true;
         }
 
-        if (this.descripcion.length > 0){
+        if (this.nuevo_movimiento.descripcion.length > 0){
             descripcion_ok = true;
         }
         else{
@@ -143,12 +132,12 @@ export class CreateMovementPage implements OnInit {
 
     actualizarSaldoCuenta(){
 
-        let monto_movimiento = parseInt(this.monto);
+        let monto_movimiento = parseInt(this.nuevo_movimiento.monto);
         let saldo_cuenta = parseInt(this.cuenta_seleccionada.saldo);
 
         let nuevo_saldo = 0;
 
-        if(this.id_tipo_movimiento === 1){
+        if(this.nuevo_movimiento.id_tipo_movimiento === 1){
 
             nuevo_saldo = (saldo_cuenta + monto_movimiento);
         }
@@ -163,34 +152,30 @@ export class CreateMovementPage implements OnInit {
 
     ingresoExitoso() {
 
-        this.DBService.insertMovimiento(this.descripcion,this.monto,new Date(),this.id_cuenta,this.id_tipo_movimiento);
+        if(this.validarIngreso()){
 
-        this.actualizarSaldoCuenta();
+            if(this.nuevo_movimiento.id_tipo_movimiento === 2){
 
-        this.goMovements();
+                this.nuevo_movimiento.monto = "-" +  this.nuevo_movimiento.monto;
+            }
+
+            this.DBService.insertMovimiento(this.nuevo_movimiento.descripcion, this.nuevo_movimiento.monto,new Date(),this.nuevo_movimiento.id_cuenta,this.nuevo_movimiento.id_tipo_movimiento);
+
+            this.actualizarSaldoCuenta();
+
+            this.goMovements();
+        }
     }
 
     goMovements() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario,
-                cuenta_enviada: this.cuenta_seleccionada
-            }
-        }
+        localStorage.setItem('cuenta_consultada', JSON.stringify(this.cuenta_seleccionada));
 
-        this.router.navigate(['/movements'], navigationExtras);
+        this.router.navigate(['/movements']);
     }
 
     goHome() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        }
-
-        this.router.navigate(['/home'], navigationExtras);
+        this.router.navigate(['/home']);
     }
-
 }

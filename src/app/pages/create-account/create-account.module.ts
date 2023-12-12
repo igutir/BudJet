@@ -10,6 +10,7 @@ import { CreateAccountPage } from './create-account.page';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     IonicModule,
     CreateAccountPageRoutingModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    ComponentsModule
   ],
   declarations: [CreateAccountPage]
 })

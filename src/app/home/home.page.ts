@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { Usuario } from '../pages/interfaces/usuario';
+import { Router } from '@angular/router';
+import { DataBaseServiceService } from '../services/data-base-service.service';
 
 @Component({
     selector: 'app-home',
@@ -14,46 +14,34 @@ export class HomePage {
         nombre: "",
     };
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router) {
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
 
-        this.activeRouter.queryParams.subscribe(params => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-            }
-        })
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+
+        localStorage.removeItem('cuenta_consultada');
+
+        this.actualizarSaldosUsuario();
+
+    }
+
+    async actualizarSaldosUsuario(){
+        await this.DBService.actualizarSaldos(this.usuario.id);
+        console.log("saldos actualizados en la bd...")
     }
 
     goToAccounts() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        }
-
-        this.router.navigate(['/accounts'], navigationExtras);
+        this.router.navigate(['/accounts']);
     }
 
     goToCreateMovements() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        }
-
-        this.router.navigate(['/create-movement'], navigationExtras);
+        this.router.navigate(['/create-movement']);
     }
 
     goToCreateAccounts() {
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario
-            }
-        }
-
-        this.router.navigate(['/create-account'], navigationExtras);
+        this.router.navigate(['/create-account']);
     }
 
 }

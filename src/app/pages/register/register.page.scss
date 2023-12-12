@@ -1,4 +1,4 @@
-.welcome-card{
+.title-card{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,12 +10,12 @@ h1 {
     margin: 0px;
 }
 
-.login-input{
+.form{
     display: flex;
     justify-content: center;
 }
 
-.loginForm{
+.button-margin-top{
     margin-top: 16px;
 }
 
@@ -25,4 +25,9 @@ h1 {
 
 .copyright{
     padding-left: 10px;
+}
+
+.title-4{
+    margin: 0px;
+    padding: 0px;
 }

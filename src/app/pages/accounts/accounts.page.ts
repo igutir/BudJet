@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
@@ -34,12 +34,11 @@ export class AccountsPage implements OnInit {
         saldo: "",
     }
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
-        this.activeRouter.queryParams.subscribe(params => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-                this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-            }
-        })
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
+
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+
+        localStorage.removeItem('cuenta_consultada');
     }
 
     ngOnInit() {
@@ -66,26 +65,37 @@ export class AccountsPage implements OnInit {
             }
         }
 
+        this.goMovements();
+    }
 
-        let navigationExtras: NavigationExtras = {
-            state: {
-                usuario: this.usuario,
-                cuenta_enviada: this.cuenta_seleccionada
-            }
-        }
+    goMovements() {
 
-        this.router.navigate(['/movements'], navigationExtras);
+        localStorage.setItem('cuenta_consultada', JSON.stringify(this.cuenta_seleccionada));
+
+        this.router.navigate(['/movements']);
     }
 
     goToCreateAccounts() {
 
+        this.router.navigate(['/create-account']);
+    }
+
+    goUpdateAccount(cuenta: any){
+
         let navigationExtras: NavigationExtras = {
             state: {
-                usuario: this.usuario
+                idEnv: cuenta.id,
+                nombreEnv: cuenta.nombre,
+                saldoEnv: cuenta.saldo,
             }
         }
 
-        this.router.navigate(['/create-account'], navigationExtras);
+        this.router.navigate(['/update-account'] , navigationExtras);
+    }
+
+    goDeleteAccount(cuenta: any){
+        this.DBService.deleteCuenta(this.usuario.id, cuenta.id);
+        this.DBService.presentToast("Cuenta Eliminada");
     }
 
 }

@@ -7,6 +7,7 @@ import { Cuenta } from '../pages/interfaces/cuenta';
 import { Movimiento } from '../pages/interfaces/movimiento';
 import { Usuario } from '../pages/interfaces/usuario';
 import { TipoMovimiento } from '../pages/interfaces/tipo_movimiento';
+import { UsuarioSimple } from '../pages/interfaces/usuario_simple';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +19,7 @@ export class DataBaseServiceService {
     //QUERYS CREACION Y POBLAMIENTO DE TABLAS ================================================
 
     //TABLAS ================================================
-    tablaUsuario: string = 'CREATE TABLE IF NOT EXISTS usuario(id INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(8) NOT NULL, password VARCHAR(4) NOT NULL, email VARCHAR(50), telefono VARCHAR(9), fecha_nacimiento DATE, imagen_perfil BLOB, notificaciones BOOLEAN NOT NULL);';
+    tablaUsuario: string = 'CREATE TABLE IF NOT EXISTS usuario(id INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(8) NOT NULL UNIQUE, password VARCHAR(4) NOT NULL, email VARCHAR(50), telefono VARCHAR(9), fecha_nacimiento DATE, imagen_perfil BLOB, notificaciones BOOLEAN NOT NULL);';
 
     tablaCuenta: string = "CREATE TABLE IF NOT EXISTS cuenta(id INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(50) NOT NULL, saldo INTEGER NOT NULL, fecha_creacion DATE NOT NULL, fecha_actualizacion DATE NOT NULL, id_usuario INTEGER NOT NULL, FOREIGN KEY(id_usuario) REFERENCES usuario(id));";
 
@@ -27,33 +28,35 @@ export class DataBaseServiceService {
     tablaMovimiento: string = "CREATE TABLE IF NOT EXISTS movimiento(id INTEGER PRIMARY KEY autoincrement, descripcion VARCHAR(50) NOT NULL, monto INTEGER NOT NULL, fecha DATE NOT NULL, id_cuenta INTEGER NOT NULL, id_tipo_movimiento INTEGER NOT NULL, FOREIGN KEY(id_cuenta) REFERENCES cuenta(id), FOREIGN KEY(id_tipo_movimiento) REFERENCES tipo_movimiento(id));";
 
     //DATOS ================================================
-        //USUARIO ================================================
+    //USUARIO ================================================
     usuarioPrueba: string = "INSERT or IGNORE INTO usuario(id, nombre, password, email, telefono, fecha_nacimiento, imagen_perfil, notificaciones) VALUES (1, 'prueba', '1234', 'email@budjet.cl', '912345678', '01/01/2000', NULL, true);";
 
-        //CUENTAS ================================================
+    //CUENTAS ================================================
     cuentaPersonal: string = "INSERT or IGNORE INTO cuenta(id, nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario) VALUES (1, 'Personal', '1500000', '01/01/2020', '03/05/2023', 1);";
 
     cuentaAhorro: string = "INSERT or IGNORE INTO cuenta(id, nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario) VALUES (2, 'Ahorro', '2000000', '01/01/2019', '14/09/2023', 1);";
 
-        //TIPOS MOVIMIENTO ================================================
+    //TIPOS MOVIMIENTO ================================================
     tipoMovimientoIngreso: string = "INSERT or IGNORE INTO tipo_movimiento(id, descripcion) VALUES (1, 'Ingreso');";
 
     tipoMovimientoGasto: string = "INSERT or IGNORE INTO tipo_movimiento(id, descripcion) VALUES (2, 'Gasto');";
 
-        //MOVIMIENTOS ================================================
+    //MOVIMIENTOS ================================================
     movimientoPersonalUno: string = "INSERT or IGNORE INTO movimiento(id, descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (1, 'Sueldo', '1500000', '01/05/2023', 1, 1);";
 
-    movimientoPersonalDos: string = "INSERT or IGNORE INTO movimiento(id, descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (2, 'Compra supermercado', '100000', '03/05/2023', 1, 2);";
+    movimientoPersonalDos: string = "INSERT or IGNORE INTO movimiento(id, descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (2, 'Compra supermercado', '-100000', '03/05/2023', 1, 2);";
 
     movimientoAhorrolUno: string = "INSERT or IGNORE INTO movimiento(id, descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (3, 'Ahorro casa', '520000', '02/04/2023', 2, 1);";
 
-    movimientoAhorrolDos: string = "INSERT or IGNORE INTO movimiento(id, descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (4, 'Emergencia', '70000', '14/09/2023', 2, 2);";
+    movimientoAhorrolDos: string = "INSERT or IGNORE INTO movimiento(id, descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (4, 'Emergencia', '-70000', '14/09/2023', 2, 2);";
 
     //OBSERVABLES  ========================================================================
 
     //USUARIO
     observableUsuario = new BehaviorSubject([]);
+    observableUsuarioSimple = new BehaviorSubject([]);
     obsUsuarioById = new BehaviorSubject([]);
+    obsAuthUsuario = new BehaviorSubject([]);
     //CUENTAS
     observableCuenta = new BehaviorSubject([]);
     observableCuentaPorUsuario = new BehaviorSubject([]);
@@ -64,15 +67,16 @@ export class DataBaseServiceService {
     obsMovimientoById = new BehaviorSubject([]);
     //TIPOS DE MOVIMIENTO
     observableTipoMovimiento = new BehaviorSubject([]);
+    obsTipoMovimientoById = new BehaviorSubject([]);
 
     private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     constructor(
         private sqlite: SQLite,
         private platform:
-        Platform, private toastController: ToastController,
+            Platform, private toastController: ToastController,
         private alertController: AlertController
-        ) {
+    ) {
         this.createDB();
     }
 
@@ -122,7 +126,7 @@ export class DataBaseServiceService {
             await this.database.executeSql(this.movimientoAhorrolUno, []);
             await this.database.executeSql(this.movimientoAhorrolDos, []);
 
-            this.selectUsuarios();
+            this.selectUsuariosSimples();
 
             this.isDBReady.next(true);
 
@@ -141,12 +145,11 @@ export class DataBaseServiceService {
                     items.push({
                         id: res.rows.item(i).id,
                         nombre: res.rows.item(i).nombre,
-                        password: res.rows.item(i).password,
-                        email:  res.rows.item(i).email,
-                        telefono:  res.rows.item(i).telefono,
-                        fecha_nacimiento:  res.rows.item(i).fecha_nacimiento,
-                        imagen_perfil:  res.rows.item(i).imagen_perfil,
-                        notificaciones:  res.rows.item(i).notificaciones
+                        email: res.rows.item(i).email,
+                        telefono: res.rows.item(i).telefono,
+                        fecha_nacimiento: res.rows.item(i).fecha_nacimiento,
+                        imagen_perfil: res.rows.item(i).imagen_perfil,
+                        notificaciones: res.rows.item(i).notificaciones
                     })
                 }
             }
@@ -159,7 +162,28 @@ export class DataBaseServiceService {
         return this.observableUsuario.asObservable();
     }
 
-    getUsuariobyId(id_usuario: number){
+    selectUsuariosSimples() {
+        return this.database.executeSql('SELECT id, nombre FROM usuario', []).then(res => {
+            let items: UsuarioSimple[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    items.push({
+                        id: res.rows.item(i).id,
+                        nombre: res.rows.item(i).nombre
+                    })
+                }
+            }
+            this.observableUsuarioSimple.next(items as any);
+
+        })
+    }
+
+    fetchUsuariosSimples(): Observable<UsuarioSimple[]> {
+        return this.observableUsuarioSimple.asObservable();
+    }
+
+
+    getUsuariobyId(id_usuario: number) {
 
         return this.database.executeSql('SELECT * FROM usuario WHERE id = ?', [id_usuario]).then(res => {
             let items: Usuario[] = [];
@@ -168,12 +192,11 @@ export class DataBaseServiceService {
                     items.push({
                         id: res.rows.item(i).id,
                         nombre: res.rows.item(i).nombre,
-                        password: res.rows.item(i).password,
-                        email:  res.rows.item(i).email,
-                        telefono:  res.rows.item(i).telefono,
-                        fecha_nacimiento:  res.rows.item(i).fecha_nacimiento,
-                        imagen_perfil:  res.rows.item(i).imagen_perfil,
-                        notificaciones:  res.rows.item(i).notificaciones
+                        email: res.rows.item(i).email,
+                        telefono: res.rows.item(i).telefono,
+                        fecha_nacimiento: res.rows.item(i).fecha_nacimiento,
+                        imagen_perfil: res.rows.item(i).imagen_perfil,
+                        notificaciones: res.rows.item(i).notificaciones
                     })
                 }
             }
@@ -187,7 +210,56 @@ export class DataBaseServiceService {
         return this.obsUsuarioById.asObservable();
     }
 
+    autenticarUsuario(nombre: string, password: string): Promise<UsuarioSimple> {
 
+        return this.database.executeSql('SELECT * FROM usuario WHERE nombre = ? AND password = ?', [nombre, password]).then(res => {
+            let usuario: UsuarioSimple = {
+                id: res.rows.item(0).id,
+                nombre: res.rows.item(0).nombre
+            }
+
+            return usuario;
+        });
+    }
+
+    fetchAuthUsuario(): Observable<Usuario[]> {
+        return this.obsAuthUsuario.asObservable();
+    }
+
+    insertUsuario(
+        nombre: string,
+        password: string,
+        email: string,
+        telefono: string,
+        fecha_nacimiento: Date,
+        imagen_perfil: string,
+        notificaciones: boolean
+    ) {
+        let data = [nombre, password, email, telefono, fecha_nacimiento, imagen_perfil, notificaciones];
+        return this.database.executeSql('INSERT INTO usuario(nombre, password, email, telefono, fecha_nacimiento, imagen_perfil, notificaciones) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(res => {
+            this.selectUsuarios();
+        })
+            .catch((e: any) => {
+                this.presentAlert('Error insert usuario: ' + e.message);
+            });
+    }
+
+    updateUsuario(
+        id_usuario: number,
+        email: string,
+        telefono: string,
+        fecha_nacimiento: Date,
+        imagen_perfil: string,
+        notificaciones: boolean
+    ) {
+        let data = [email, telefono, fecha_nacimiento, imagen_perfil, notificaciones, id_usuario];
+        return this.database.executeSql('UPDATE usuario SET email = ?, telefono = ?, fecha_nacimiento = ?, imagen_perfil = ?, notificaciones = ? WHERE id = ?', data).then(data2 => {
+            this.getUsuariobyId(id_usuario);
+        })
+        .catch((e: any) => {
+            this.presentAlert('Error update cuenta: ' + e.message);
+        });
+    }
 
     //CUENTAS -------------------------------------------------------------
     selectCuentas() {
@@ -272,28 +344,27 @@ export class DataBaseServiceService {
         fecha_creacion: Date,
         fecha_actualizacion: Date,
         id_usuario: number
-        ){
-            let data = [nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario];
-            return this.database.executeSql('INSERT INTO cuenta(nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario) VALUES (?, ?, ?, ?, ?)', data).then(res=> {
-                this.selectCuentasUsuario(id_usuario);
-            })
+    ) {
+        let data = [nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario];
+        return this.database.executeSql('INSERT INTO cuenta(nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario) VALUES (?, ?, ?, ?, ?)', data).then(res => {
+            this.selectCuentasUsuario(id_usuario);
+        })
             .catch((e: any) => {
                 this.presentAlert('Error insert cuenta: ' + e.message);
             });
     }
 
-    updateCuentas(
+    updateCuenta(
         id: number,
         nombre: string,
         saldo: string,
-        fecha_creacion: Date,
         fecha_actualizacion: Date,
         id_usuario: number
-        ){
-            let data = [nombre, saldo, fecha_creacion, fecha_actualizacion, id_usuario, id];
-            return this.database.executeSql('UPDATE cuenta SET nombre = ?, saldo = ?, fecha_creacion = ?, fecha_actualizacion = ?, id_usuario = ? WHERE id = ?', data).then(data2=> {
-                this.selectCuentasUsuario(id_usuario);
-            })
+    ) {
+        let data = [nombre, saldo, fecha_actualizacion, id_usuario, id];
+        return this.database.executeSql('UPDATE cuenta SET nombre = ?, saldo = ?, fecha_actualizacion = ?, id_usuario = ? WHERE id = ?', data).then(data2 => {
+            this.selectCuentasUsuario(id_usuario);
+        })
             .catch((e: any) => {
                 this.presentAlert('Error update cuenta: ' + e.message);
             });
@@ -302,26 +373,23 @@ export class DataBaseServiceService {
     updateMontoCuentas(
         id: number,
         saldo: string
-        ){
-            let data = [saldo, id];
-            return this.database.executeSql('UPDATE cuenta SET saldo = ? WHERE id = ?', data).then(data2=> {
-                this.getCuentaById(id);
-            })
+    ) {
+        let data = [saldo, id];
+        return this.database.executeSql('UPDATE cuenta SET saldo = ? WHERE id = ?', data).then(data2 => {
+            this.getCuentaById(id);
+        })
             .catch((e: any) => {
                 this.presentAlert('Error update cuenta: ' + e.message);
             });
     }
 
-    deleteCuenta(id_usuario: number, id_cuenta: number, movimientos: string[]){
+    deleteCuenta(id_usuario: number, id_cuenta: number) {
 
-        for(var movimiento in movimientos){
+        this.database.executeSql('DELETE FROM movimiento WHERE id_cuenta = ?', [id_cuenta]).then(a => {
+            this.selectMovimientosCuenta(id_cuenta);
+        });
 
-            this.database.executeSql('DELETE FROM movimiento WHERE id = ?', [movimiento]).then(a=>{
-                this.selectMovimientosCuenta(id_cuenta);
-            })
-        }
-
-        return this.database.executeSql('DELETE FROM cuenta WHERE id = ?',[id_cuenta]).then(a=>{
+        return this.database.executeSql('DELETE FROM cuenta WHERE id = ?', [id_cuenta]).then(a => {
             this.selectCuentasUsuario(id_usuario);
         }).catch((e: any) => {
             this.presentAlert('Error delete cuenta: ' + e.message);
@@ -374,6 +442,7 @@ export class DataBaseServiceService {
 
             this.observableMovimientoCuenta.next(items as any);
 
+
         })
     }
 
@@ -412,11 +481,11 @@ export class DataBaseServiceService {
         fecha: Date,
         id_cuenta: number,
         id_tipo_movimiento: number
-        ){
-            let data = [descripcion, monto, fecha, id_cuenta, id_tipo_movimiento];
-            return this.database.executeSql('INSERT INTO movimiento(descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (?, ?, ?, ?, ?)', data).then(res=> {
-                this.selectMovimientosCuenta(id_cuenta);
-            })
+    ) {
+        let data = [descripcion, monto, fecha, id_cuenta, id_tipo_movimiento];
+        return this.database.executeSql('INSERT INTO movimiento(descripcion, monto, fecha, id_cuenta, id_tipo_movimiento) VALUES (?, ?, ?, ?, ?)', data).then(res => {
+            this.selectMovimientosCuenta(id_cuenta);
+        })
             .catch((e: any) => {
                 this.presentAlert('Error insert movimiento: ' + e.message);
             });
@@ -427,20 +496,19 @@ export class DataBaseServiceService {
         id: number,
         descripcion: string,
         monto: string,
-        fecha: Date,
         id_cuenta: number,
-        id_tipo_movimiento: number
-    ){
-        let data = [descripcion, monto, fecha, id_cuenta, id_tipo_movimiento, id];
-            return this.database.executeSql('UPDATE movimiento SET descripcion = ?, monto = ?, fecha = ?, id_cuenta = ?, id_tipo_movimiento = ? WHERE id = ?', data).then(data2=> {
-                this.selectMovimientosCuenta(id_cuenta);
-            }).catch((e: any) => {
-                this.presentAlert('Error update movimiento: ' + e.message);
-            });
+        id_tipo_movimiento: number,
+    ) {
+        let data = [descripcion, monto, id_cuenta, id_tipo_movimiento, id];
+        return this.database.executeSql('UPDATE movimiento SET descripcion = ?, monto = ?, id_cuenta = ?, id_tipo_movimiento = ? WHERE id = ?', data).then(data2 => {
+            this.selectMovimientosCuenta(id_cuenta);
+        }).catch((e: any) => {
+            this.presentAlert('Error update movimiento: ' + e.message);
+        });
     }
 
-    deleteMovimiento(id_movimiento: number, id_cuenta: number){
-        return this.database.executeSql('DELETE FROM movimiento WHERE id = ?',[id_movimiento]).then(a=>{
+    deleteMovimiento(id_movimiento: number, id_cuenta: number) {
+        return this.database.executeSql('DELETE FROM movimiento WHERE id = ?', [id_movimiento]).then(a => {
             this.selectMovimientosCuenta(id_cuenta);
         }).catch((e: any) => {
             this.presentAlert('Error delete movimiento: ' + e.message);
@@ -466,9 +534,118 @@ export class DataBaseServiceService {
         })
     }
 
-    fetchTiposMovimiento(): Observable<TipoMovimiento[]>{
+    fetchTiposMovimiento(): Observable<TipoMovimiento[]> {
         return this.observableTipoMovimiento.asObservable();
     }
+
+    getTipoMovimientoById(id_tipo_movimiento: number) {
+        return this.database.executeSql('SELECT * FROM tipo_movimiento WHERE id = ?', [id_tipo_movimiento]).then(res => {
+            let items: TipoMovimiento[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    items.push({
+                        id: res.rows.item(i).id,
+                        descripcion: res.rows.item(i).descripcion
+                    })
+                }
+            }
+
+            this.obsTipoMovimientoById.next(items as any);
+
+        })
+    }
+
+    fetchTipoMovimientoById(): Observable<Movimiento[]> {
+        return this.obsTipoMovimientoById.asObservable();
+    }
+
+
+    //Actualizar saldos de cuentas
+
+    getCuentasSimplesUsuario(id_usuario: number): Promise<any[]> {
+
+        return this.database.executeSql('SELECT id FROM cuenta WHERE id_usuario = ?', [id_usuario]).then(res => {
+            let cuentas: any[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    cuentas.push({
+                        id: res.rows.item(i).id
+                    })
+                }
+            }
+            return cuentas;
+        });
+    }
+
+    getMovimientosSimplePorCuenta(cuenta: any): Promise<any[]> {
+
+        return this.database.executeSql('SELECT monto FROM movimiento WHERE id_cuenta = ?', [cuenta]).then(res => {
+            let montos: any[] = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    montos.push({
+                        monto_mov: res.rows.item(i).monto
+                    })
+                }
+            }
+            return montos;
+        });
+
+    }
+
+    async actualizarSaldos(id_usuario: number){
+
+        let cuentas_usuario: any[] = [];
+
+        cuentas_usuario = await this.getCuentasSimplesUsuario(id_usuario);
+
+        if(cuentas_usuario.length > 0){
+
+            let movimientos_cuenta: any[] = [];
+
+            let saldo_cuenta = 0;
+
+            for(let cuenta of cuentas_usuario){
+
+                movimientos_cuenta = [];
+
+                movimientos_cuenta = await this.getMovimientosSimplePorCuenta(cuenta.id);
+
+                if(movimientos_cuenta.length > 0){
+
+                    saldo_cuenta = 0;
+
+                    for(let movimiento of movimientos_cuenta){
+
+                        saldo_cuenta = saldo_cuenta + (parseInt(movimiento.monto_mov));
+
+                    }
+
+                    await this.updateMontoCuentas(cuenta.id, String(saldo_cuenta));
+
+                }
+                else{
+                    console.log("No existen movimientos para la cuenta id: " + cuenta);
+                }
+            }
+        }
+        else{
+            console.log("No existen cuentas para el usuario");
+        }
+    }
+
+    //Movimiento saldo inicial
+    async ultimaCuentaCreada(id_usuario: number){
+        let cuentas_usuario: any[] = [];
+        let id_ultima_cuenta = 0;
+
+        cuentas_usuario = await this.getCuentasSimplesUsuario(id_usuario);
+
+        id_ultima_cuenta = cuentas_usuario[cuentas_usuario.length - 1].id;
+
+        return id_ultima_cuenta;
+    }
+
 
     //Funciones BD
     async presentToast(msj: string) {
@@ -490,4 +667,4 @@ export class DataBaseServiceService {
 
         await alert.present();
     }
- }
+}

@@ -9,39 +9,39 @@
 	</ion-header>
 
     <div class="ion-padding">
-        <ion-list class="welcome-card" #titulo>
+        <ion-list class="title-card" #titulo>
             <ion-item>
                 <h1>BudJet App</h1>
             </ion-item>
         </ion-list>
     </div>
 
-	<ion-card class="login-input">
+	<ion-card class="form">
 		<ion-grid>
 			<ion-row class="ion-justify-content-center">
 				<ion-col size="auto">
 
-					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" required [(ngModel)]="user.username"></ion-input>
+					<ion-input class="loginForm" label="Usuario: " labelPlacement="stacked" type="text" placeholder="Ingrese su usuario" required [(ngModel)]="usuario_actual.nombre"></ion-input>
 
-					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" value="password" required [(ngModel)]="user.password"></ion-input>
+					<ion-input class="loginForm" label="Password: " labelPlacement="stacked" type="password" placeholder="password" required [(ngModel)]="password"></ion-input>
 
-                    <ion-input class="loginForm" label="Email: " labelPlacement="stacked" type="email" placeholder="usuario@budjet.cl" required [(ngModel)]="user.email"></ion-input>
+                    <ion-input class="loginForm" label="Email: " labelPlacement="stacked" type="email" placeholder="usuario@budjet.cl" required [(ngModel)]="usuario_actual.email"></ion-input>
 
-                    <ion-input class="loginForm" label="Telefono: " labelPlacement="stacked" type="tel" placeholder="912345678" required [(ngModel)]="user.telefono"></ion-input>
-
+                    <ion-input class="loginForm" label="Telefono: " labelPlacement="stacked" type="tel" placeholder="912345678" required [(ngModel)]="usuario_actual.telefono"></ion-input>
+                    <br>
+                    <ion-toggle [enableOnOffLabels]="true" [checked]="true" (ionChange)="cambiarToggleNotificaciones()"> Recibir notificaciones </ion-toggle>
+                    <br>
                 </ion-col>
             </ion-row>
-            <ion-row class="ion-justify-content-center">
+            <ion-row class="ion-justify-content-center button-margin-top">
+                <ion-button (click)="goToLogin()">Volver al login</ion-button>
                 <ion-button (click)="enviarDatos()">Registrarse</ion-button>
 			</ion-row>
             <br>
 		</ion-grid>
+
 	</ion-card>
 
 </ion-content>
 
-<ion-footer [translucent]="true">
-	<ion-toolbar>
-		<h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
-	</ion-toolbar>
-</ion-footer>
+<app-footer></app-footer>

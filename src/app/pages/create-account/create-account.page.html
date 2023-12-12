@@ -19,14 +19,14 @@
     </ion-header>
 
     <div class="ion-padding">
-        <ion-list class="welcome-card">
+        <ion-list class="title-card">
             <ion-item>
                 <h1>Crear cuenta</h1>
             </ion-item>
         </ion-list>
     </div>
 
-    <ion-grid class="home-grid">
+    <ion-grid class="form">
 
         <ion-row>
             <ion-col>
@@ -47,19 +47,13 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
-            <ion-col>
-                <ion-button (click)="ingresoExitoso()">Ingresar cuenta</ion-button>
-                <ion-button (click)="goHome()">Volver al Inicio</ion-button>
-            </ion-col>
+        <ion-row class="ion-justify-content-center">
+            <ion-button (click)="ingresoExitoso()">Ingresar cuenta</ion-button>
+            <ion-button (click)="goHome()">Volver al Inicio</ion-button>
         </ion-row>
 
     </ion-grid>
 
 </ion-content>
 
-<ion-footer [translucent]="true">
-    <ion-toolbar>
-        <h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
-    </ion-toolbar>
-</ion-footer>
+<app-footer></app-footer>

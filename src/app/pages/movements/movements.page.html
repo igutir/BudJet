@@ -27,33 +27,42 @@
     </div>
 
     <div>
-        <ion-list *ngFor="let movimiento of arreglo_movimientos" [inset]="true">
-            <ion-item>
-                <ion-icon *ngIf="movimiento.id_tipo_movimiento === 1" color="success" slot="start"
-                    name="add-circle-outline" size="large"></ion-icon>
-                <ion-icon *ngIf="movimiento.id_tipo_movimiento === 2" color="danger" slot="start"
-                    name="remove-circle-outline" size="large"></ion-icon>
-                <ion-label>{{movimiento.descripcion}}</ion-label>
-                <ion-label *ngIf="movimiento.id_tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
-                    number:'1.0-0':'es'}}</ion-label>
-                <ion-label *ngIf="movimiento.id_tipo_movimiento === 2" slot="end"> - $ {{movimiento.monto |
-                    number:'1.0-0':'es'}}</ion-label>
-            </ion-item>
+        <ion-list [inset]="true">
+
+            <ion-item-sliding *ngFor="let movimiento of arreglo_movimientos">
+
+                <ion-item>
+                    <ion-icon *ngIf="movimiento.id_tipo_movimiento === 1" color="success" slot="start"
+                        name="add-circle-outline" size="large"></ion-icon>
+                    <ion-icon *ngIf="movimiento.id_tipo_movimiento === 2" color="danger" slot="start"
+                        name="remove-circle-outline" size="large"></ion-icon>
+                    <ion-label>{{movimiento.descripcion}}</ion-label>
+                    <ion-label *ngIf="movimiento.id_tipo_movimiento === 1" slot="end">$ {{movimiento.monto |
+                        number:'1.0-0':'es'}}</ion-label>
+                    <ion-label *ngIf="movimiento.id_tipo_movimiento === 2" slot="end">$ {{movimiento.monto |
+                        number:'1.0-0':'es'}}</ion-label>
+                </ion-item>
+
+                <ion-item-options>
+                    <ion-item-option (click)="goUpdateMovement(movimiento)">
+                        <ion-icon slot="bottom" name="pencil-sharp"></ion-icon>
+                        Modificar
+                    </ion-item-option>
+                    <ion-item-option color="danger" (click)="goDeleteMovement(movimiento)">
+                        <ion-icon slot="bottom" name="trash"></ion-icon>
+                        Eliminar
+                    </ion-item-option>
+                </ion-item-options>
+
+            </ion-item-sliding>
         </ion-list>
     </div>
 
-    <ion-grid>
-        <ion-row>
-            <ion-col>
-                <ion-button (click)="goHome()">Volver al Inicio</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-row class="ion-justify-content-center">
+            <ion-button (click)="goToCreateMovements()">Nuevo movimiento</ion-button>
+            <ion-button (click)="goHome()">Volver al Inicio</ion-button>
+    </ion-row>
 
 </ion-content>
 
-<ion-footer [translucent]="true">
-    <ion-toolbar>
-        <h5 class="copyright">© BudJet App Todos los derechos reservados</h5>
-    </ion-toolbar>
-</ion-footer>
+<app-footer></app-footer>

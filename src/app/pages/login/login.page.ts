@@ -1,9 +1,9 @@
-import { OnInit, AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
-import type { Animation } from  '@ionic/angular'
-import { AnimationController, IonList } from  '@ionic/angular'
+import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
+import type { Animation } from '@ionic/angular'
+import { AnimationController, IonList } from '@ionic/angular'
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
-import { Usuario } from '../interfaces/usuario';
+import { UsuarioSimple } from '../interfaces/usuario_simple';
 
 @Component({
     selector: 'app-login',
@@ -12,20 +12,7 @@ import { Usuario } from '../interfaces/usuario';
 })
 export class LoginPage implements AfterViewInit {
 
-    @ViewChild(IonList, {read: ElementRef}) titulo!: ElementRef<HTMLIonListElement>;
-
-    usuariosRegistrados: Usuario[] = [
-        {
-            id: 0,
-            nombre: "",
-            password: "",
-            email: "",
-            telefono: "",
-            fecha_nacimiento: new Date(),
-            imagen_perfil: "",
-            notificaciones: false
-        }
-    ]
+    @ViewChild(IonList, { read: ElementRef }) titulo!: ElementRef<HTMLIonListElement>;
 
     usuarioActual: any = {
         id: 0,
@@ -34,21 +21,18 @@ export class LoginPage implements AfterViewInit {
 
     password = "";
 
+    validacion_credenciales = false;
+    autenticacion = false;
+
+    usuarios_simples: UsuarioSimple[] = [];
+
     private animation!: Animation;
 
     constructor(private router: Router, private animationCtrl: AnimationController, private DBService: DataBaseServiceService) { }
 
     ngAfterViewInit() {
 
-        localStorage.removeItem('usuario');
-
-        this.DBService.dbState().subscribe(res => {
-            if(res){
-                this.DBService.fetchUsuarios().subscribe(item => {
-                    this.usuariosRegistrados = item;
-                })
-            }
-        })
+        localStorage.clear();
 
         this.animation = this.animationCtrl
             .create()
@@ -59,7 +43,6 @@ export class LoginPage implements AfterViewInit {
             .fromTo("opacity", 0.2, 1);
 
         this.animation.play();
-
     }
 
     numerico(texto: string) {
@@ -90,64 +73,69 @@ export class LoginPage implements AfterViewInit {
     validarCredenciales() {
         let validacion_usuario = false;
         let validacion_password = false;
+        this.validacion_credenciales = false;
 
         if (this.alfanumerico(this.usuarioActual.nombre) && this.usuarioActual.nombre.length >= 3 && this.usuarioActual.nombre.length <= 8) validacion_usuario = true;
 
         if (this.numerico(this.password) && this.password.length === 4) validacion_password = true;
 
-        if (validacion_usuario && validacion_password){
-            return true;
+        if (validacion_usuario && validacion_password) {
+            this.validacion_credenciales = true;
 
+        }
+        else {
+            this.DBService.presentAlert('Credenciales inválidas');
+        }
+    }
+
+    async autenticarUsuarioSimple(){
+
+        this.autenticacion = false;
+
+        let usuario: any = {
+            id: 0,
+            nombre: ""
+        };
+
+        usuario = await this.DBService.autenticarUsuario(this.usuarioActual.nombre, this.password);
+
+        if(usuario.id === 0){
+
+            this.DBService.presentAlert("Usuario no encontrado");
         }
         else{
-            this.DBService.presentAlert('Credenciales inválidas');
-            return false;
+            this.usuarioActual.id = usuario.id;
+            this.usuarioActual.nombre = usuario.nombre;
+
+            this.autenticacion = true;
         }
     }
 
+    async enviarDatos() {
 
-    validarUsuario(){
-        for(let i=0; i< this.usuariosRegistrados.length; i++){
-            if(this.usuariosRegistrados[i].nombre === this.usuarioActual.nombre){
-                if(this.usuariosRegistrados[i].password === this.password){
-                    this.usuarioActual.id = this.usuariosRegistrados[i].id
-                    return true;
-                }
-                else{
-                    this.DBService.presentAlert('Contraseña incorrecta');
-                }
-            }
-        }
-        this.DBService.presentAlert('Usuario no encontrado');
+        this.validarCredenciales();
 
-        return false;
-    }
+        await this.autenticarUsuarioSimple();
 
-    enviarDatos() {
+        if (this.validacion_credenciales && this.autenticacion) {
 
-        if (this.validarCredenciales() && this.validarUsuario()) {
-
-            console.log("validacion credenciales ok");
-
-            localStorage.setItem('usuario', this.usuarioActual);
+            localStorage.setItem('usuario', JSON.stringify(this.usuarioActual));
 
             this.DBService.presentToast('Login exitoso');
 
-            let navigationExtras: NavigationExtras = {
-                state: {
-                    usuario: this.usuarioActual
-                }
-            }
-
-            this.router.navigate(['/home'], navigationExtras);
+            this.goToHome();
         }
     }
 
-    goToRegister(){
+    goToHome() {
+        this.router.navigate(['/home']);
+    }
+
+    goToRegister() {
         this.router.navigate(['/register']);
     }
 
-    goToApi(){
+    goToApi() {
         this.router.navigate(['/apirest']);
     }
 

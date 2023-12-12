@@ -5,6 +5,9 @@ import { AnimationController, IonItem } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
+import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
+import { Usuario } from '../interfaces/usuario';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-profile',
@@ -16,20 +19,43 @@ export class ProfilePage implements AfterViewInit {
 
     private animacionProfile!: Animation;
 
-    user = {
-        username: "Israel",
-        fecha_nacimiento: new Date(1994, 0, 1),
-        email: "correo@budjet.cl",
-        telefono: 123456789
-    };
+    usuario: any = {
+        id: 0,
+        nombre: ""
+    }
+
+    data_usuario: Usuario[] = [
+        {
+            id: 0,
+            nombre: "",
+            email: "",
+            telefono: "",
+            fecha_nacimiento: new Date(),
+            imagen_perfil: "",
+            notificaciones: false
+        }
+    ]
 
     imagen: any = "/assets/img/default_profile_img.png";
 
-    constructor(private animationCtrl: AnimationController) {
+    constructor(private animationCtrl: AnimationController, private DBService: DataBaseServiceService) {
         registerLocaleData(es);
+
+        this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+
     }
 
     ngAfterViewInit() {
+
+        this.DBService.getUsuariobyId(this.usuario.id);
+
+        this.DBService.dbState().subscribe(res => {
+            if (res) {
+                this.DBService.fetchUsuarioById().subscribe(item => {
+                    this.data_usuario = item;
+                })
+            }
+        })
 
         const animacionItem1 = this.animationCtrl
             .create()
@@ -68,10 +94,10 @@ export class ProfilePage implements AfterViewInit {
             .fromTo("opacity", 0.1, 1);
 
         this.animacionProfile = this.animationCtrl
-        .create()
-        .duration(1000)
-        .iterations(1)
-        .addAnimation([animacionItem1, animacionItem2, animacionItem3, animacionItem4, animacionItem5]);
+            .create()
+            .duration(1000)
+            .iterations(1)
+            .addAnimation([animacionItem1, animacionItem2, animacionItem3, animacionItem4, animacionItem5]);
 
         this.runAnimations();
     }
