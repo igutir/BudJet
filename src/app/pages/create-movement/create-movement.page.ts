@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { Router } from '@angular/router';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 import { Cuenta } from '../interfaces/cuenta';
 import { TipoMovimiento } from '../interfaces/tipo_movimiento';
@@ -49,7 +49,7 @@ export class CreateMovementPage implements OnInit {
     id_tipo_movimiento: 0
     }
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
     }

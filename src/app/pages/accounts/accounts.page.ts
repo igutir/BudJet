@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
@@ -34,7 +34,7 @@ export class AccountsPage implements OnInit {
         saldo: "",
     }
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 

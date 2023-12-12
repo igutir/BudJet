@@ -1,9 +1,8 @@
-import { OnInit, AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 import type { Animation } from '@ionic/angular'
 import { AnimationController, IonList } from '@ionic/angular'
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
-import { Usuario } from '../interfaces/usuario';
 import { UsuarioSimple } from '../interfaces/usuario_simple';
 
 @Component({
@@ -124,8 +123,12 @@ export class LoginPage implements AfterViewInit {
 
             this.DBService.presentToast('Login exitoso');
 
-            this.router.navigate(['/home']);
+            this.goToHome();
         }
+    }
+
+    goToHome() {
+        this.router.navigate(['/home']);
     }
 
     goToRegister() {

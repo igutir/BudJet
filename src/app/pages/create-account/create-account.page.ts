@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Cuenta } from '../interfaces/cuenta';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 
@@ -24,7 +24,7 @@ export class CreateAccountPage implements OnInit {
         id_usuario: 0,
     }
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 

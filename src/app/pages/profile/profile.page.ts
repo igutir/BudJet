@@ -7,6 +7,7 @@ import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 import { Usuario } from '../interfaces/usuario';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-profile',

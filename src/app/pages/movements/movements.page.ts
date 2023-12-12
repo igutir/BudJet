@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { Movimiento } from '../interfaces/movimiento';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
 import { registerLocaleData } from '@angular/common';
@@ -34,7 +34,7 @@ export class MovementsPage implements OnInit {
         }
     ]
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 

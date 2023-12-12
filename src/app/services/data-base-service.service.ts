@@ -595,15 +595,9 @@ export class DataBaseServiceService {
 
     async actualizarSaldos(id_usuario: number){
 
-        console.log("------------");
-        console.log("Inicio proceso...");
-
         let cuentas_usuario: any[] = [];
 
         cuentas_usuario = await this.getCuentasSimplesUsuario(id_usuario);
-
-        console.log("Cuentas del usuario: " + JSON.stringify(cuentas_usuario));
-        console.log("Largo del array de cuentas: " + cuentas_usuario.length);
 
         if(cuentas_usuario.length > 0){
 
@@ -611,39 +605,19 @@ export class DataBaseServiceService {
 
             let saldo_cuenta = 0;
 
-            let ciclo_cuenta = 1;
-
-            let ciclo_mov = 1;
-
             for(let cuenta of cuentas_usuario){
-
-                console.log("Ciclo [ cuentas ]: " + ciclo_cuenta);
 
                 movimientos_cuenta = [];
 
                 movimientos_cuenta = await this.getMovimientosSimplePorCuenta(cuenta.id);
 
-                console.log("Movimientos de la cuenta " + cuenta.id + ": " + JSON.stringify(movimientos_cuenta));
-                console.log("Largo del array de movimientos: " + movimientos_cuenta.length);
-
                 if(movimientos_cuenta.length > 0){
 
-                    ciclo_mov = 1;
                     saldo_cuenta = 0;
 
                     for(let movimiento of movimientos_cuenta){
 
-                        console.log("Ciclo [ movimientos ]: " + ciclo_mov);
-
-                        console.log("Monto movimiento " + movimiento.monto_mov + ": " + JSON.stringify(movimiento));
-                        console.log("Saldo inicio" + saldo_cuenta);
-
-
                         saldo_cuenta = saldo_cuenta + (parseInt(movimiento.monto_mov));
-
-                        console.log("Saldo fin" + saldo_cuenta);
-
-                        ciclo_mov = ciclo_mov + 1;
 
                     }
 
@@ -653,8 +627,6 @@ export class DataBaseServiceService {
                 else{
                     console.log("No existen movimientos para la cuenta id: " + cuenta);
                 }
-
-                ciclo_cuenta = ciclo_cuenta + 1;
             }
         }
         else{

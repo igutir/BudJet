@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { Usuario } from '../pages/interfaces/usuario';
+import { Router } from '@angular/router';
 import { DataBaseServiceService } from '../services/data-base-service.service';
 
 @Component({
@@ -15,7 +14,7 @@ export class HomePage {
         nombre: "",
     };
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 

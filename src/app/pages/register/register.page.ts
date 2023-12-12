@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ViewChildren, ViewChild, ElementRef } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Animation, AnimationController, IonList } from '@ionic/angular'
 import { Usuario } from '../interfaces/usuario';
