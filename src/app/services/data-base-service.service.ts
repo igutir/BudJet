@@ -496,11 +496,10 @@ export class DataBaseServiceService {
         id: number,
         descripcion: string,
         monto: string,
-        id_cuenta: number,
-        id_tipo_movimiento: number,
+        id_cuenta: number
     ) {
-        let data = [descripcion, monto, id_cuenta, id_tipo_movimiento, id];
-        return this.database.executeSql('UPDATE movimiento SET descripcion = ?, monto = ?, id_cuenta = ?, id_tipo_movimiento = ? WHERE id = ?', data).then(data2 => {
+        let data = [descripcion, monto, id];
+        return this.database.executeSql('UPDATE movimiento SET descripcion = ?, monto = ? WHERE id = ?', data).then(data2 => {
             this.selectMovimientosCuenta(id_cuenta);
         }).catch((e: any) => {
             this.presentAlert('Error update movimiento: ' + e.message);
@@ -538,21 +537,15 @@ export class DataBaseServiceService {
         return this.observableTipoMovimiento.asObservable();
     }
 
-    getTipoMovimientoById(id_tipo_movimiento: number) {
+    getTipoMovimientoById(id_tipo_movimiento: number): Promise<TipoMovimiento> {
+
         return this.database.executeSql('SELECT * FROM tipo_movimiento WHERE id = ?', [id_tipo_movimiento]).then(res => {
-            let items: TipoMovimiento[] = [];
-            if (res.rows.length > 0) {
-                for (var i = 0; i < res.rows.length; i++) {
-                    items.push({
-                        id: res.rows.item(i).id,
-                        descripcion: res.rows.item(i).descripcion
-                    })
-                }
+            let item: TipoMovimiento = {
+                id: res.rows.item(0).id,
+                descripcion: res.rows.item(0).descripcion
             }
-
-            this.obsTipoMovimientoById.next(items as any);
-
-        })
+            return item;
+        });
     }
 
     fetchTipoMovimientoById(): Observable<Movimiento[]> {

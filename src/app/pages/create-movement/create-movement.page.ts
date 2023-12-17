@@ -136,6 +136,7 @@ export class CreateMovementPage implements OnInit {
         let saldo_cuenta = parseInt(this.cuenta_seleccionada.saldo);
 
         let nuevo_saldo = 0;
+        let saldo_final =  "";
 
         if(this.nuevo_movimiento.id_tipo_movimiento === 1){
 
@@ -145,23 +146,23 @@ export class CreateMovementPage implements OnInit {
             nuevo_saldo = (saldo_cuenta - monto_movimiento);
         }
 
-        let saldo_final = String(nuevo_saldo);
+        saldo_final = String(nuevo_saldo);
 
         this.DBService.updateMontoCuentas(this.cuenta_seleccionada.id, saldo_final);
     }
 
-    ingresoExitoso() {
+    async ingresoExitoso() {
 
         if(this.validarIngreso()){
+
+            await this.actualizarSaldoCuenta();
 
             if(this.nuevo_movimiento.id_tipo_movimiento === 2){
 
                 this.nuevo_movimiento.monto = "-" +  this.nuevo_movimiento.monto;
             }
 
-            this.DBService.insertMovimiento(this.nuevo_movimiento.descripcion, this.nuevo_movimiento.monto,new Date(),this.nuevo_movimiento.id_cuenta,this.nuevo_movimiento.id_tipo_movimiento);
-
-            this.actualizarSaldoCuenta();
+            await this.DBService.insertMovimiento(this.nuevo_movimiento.descripcion, this.nuevo_movimiento.monto,new Date(),this.nuevo_movimiento.id_cuenta,this.nuevo_movimiento.id_tipo_movimiento);
 
             this.goMovements();
         }

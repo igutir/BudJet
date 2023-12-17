@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DataBaseServiceService } from 'src/app/services/data-base-service.service';
-import { TipoMovimiento } from '../interfaces/tipo_movimiento';
-import { Cuenta } from '../interfaces/cuenta';
+
 
 @Component({
     selector: 'app-update-movement',
@@ -19,23 +18,6 @@ export class UpdateMovementPage implements OnInit {
 
     };
 
-    arreglo_cuentas: Cuenta[] = [
-        {
-            id: 0,
-            nombre: "",
-            saldo: "",
-            fecha_creacion: new Date(),
-            fecha_actualizacion: new Date(),
-            id_usuario: 0
-        }
-    ]
-
-    tipos_movimiento: TipoMovimiento[] = [
-            {
-                id: 0,
-                descripcion: ""
-            }
-        ]
     //ACTUALES
 
     cuenta_consultada: any = {
@@ -45,83 +27,113 @@ export class UpdateMovementPage implements OnInit {
     }
 
     tipo_movimiento: any = {
-            id: 0,
-            descripcion: ""
-        }
+        id: 0,
+        descripcion: ""
+    }
+
 
     //NUEVOS
+
+    movimiento: any = {
+        id: 0,
+        descripcion: "",
+        monto: "",
+        id_cuenta: 0,
+        nombre_cuenta: "",
+        id_tipo_movimiento: 0
+    }
 
     id = 0;
     descripcion = "";
     monto = "";
     fecha = new Date();
     id_cuenta = 0;
+    nombre_cuenta = "";
     id_tipo_movimiento = 0;
+    descripcion_tipo = "";
 
 
-    constructor(private activeRouter: ActivatedRoute, private router: Router, private DBService: DataBaseServiceService) {
+    constructor(private router: Router, private DBService: DataBaseServiceService) {
 
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 
         this.cuenta_consultada = JSON.parse(localStorage.getItem("cuenta_consultada") || '{}');
 
-        this.activeRouter.queryParams.subscribe(param =>{
-            if(this.router.getCurrentNavigation()?.extras.state){
-                this.id = this.router.getCurrentNavigation()?.extras?.state?.['idEnv'];
-                this.descripcion = this.router.getCurrentNavigation()?.extras?.state?.['descripcionEnv'];
-                this.monto = this.router.getCurrentNavigation()?.extras?.state?.['montoEnv'];
-                this.id_cuenta = this.router.getCurrentNavigation()?.extras?.state?.['id_cuentaEnv'];
-                this.id_tipo_movimiento = this.router.getCurrentNavigation()?.extras?.state?.['id_tipo_movimientoEnv'];
-            }
-        })
-     }
+        this.movimiento = JSON.parse(localStorage.getItem("movement_info") || '{}');
 
-    ngOnInit() {
+        this.id = this.movimiento.id;
+        this.descripcion = this.movimiento.descripcion;
+        this.monto = this.movimiento.monto;
+        this.id_cuenta = this.movimiento.id_cuenta;
+        this.nombre_cuenta = this.movimiento.nombre_cuenta;
+        this.id_tipo_movimiento = this.movimiento.id_tipo_movimiento;
 
-
-        //CUENTAS REGISTRADAS DEL USUARIO
-        this.DBService.selectCuentasUsuario(this.usuario.id);
-
-        this.DBService.dbState().subscribe(res => {
-            if(res){
-                this.DBService.fetchCuentasPorUsuario().subscribe(item => {
-                    this.arreglo_cuentas = item;
-                })
-            }
-        })
-
-        //TIPOS DE MOVIMIENTO REGISTRADOS EN LA APP
-        this.DBService.selectTiposMovimiento();
-
-        this.DBService.dbState().subscribe(res => {
-            if(res){
-                this.DBService.fetchTiposMovimiento().subscribe(item => {
-                    this.tipos_movimiento = item;
-                })
-            }
-        })
-
-        this.DBService.getTipoMovimientoById(this.id_tipo_movimiento);
-
-        this.DBService.dbState().subscribe(res => {
-            if(res){
-                this.DBService.fetchTipoMovimientoById().subscribe(item => {
-                    this.tipo_movimiento = item;
-                })
-            }
-        })
     }
 
-    setCuenta(cuenta: Cuenta) {
-        this.id_cuenta = cuenta.id;
+    async ngOnInit() {
+
+        this.tipo_movimiento = await this.DBService.getTipoMovimientoById(this.id_tipo_movimiento);
+
+        console.log("monto de local Storage: " + this.movimiento.monto);
+
+        let monto_abs = String(Math.abs(this.movimiento.monto));
+
+        console.log("monto ABS: " + monto_abs);
+
+        this.monto = monto_abs;
+
+        console.log("monto nuevo: " + this.monto);
+
     }
 
-    setTipoCuenta(tipo: TipoMovimiento) {
-        this.id_tipo_movimiento = tipo.id;
+    async actualizarSaldoCuenta(){
+
+        let saldo_antiguo = parseInt(this.cuenta_consultada.saldo);
+        let saldo_nuevo = 0;
+        let monto_antiguo = Math.abs(parseInt(this.movimiento.monto));
+        let monto_nuevo = parseInt(this.monto);
+        let saldo_final = "";
+
+        console.log("saldo_antiguo : " + saldo_antiguo);
+        console.log("monto_antiguo : " + monto_antiguo);
+        console.log("monto_nuevo : " + monto_nuevo);
+
+        console.log("saldo_nuevo : " + saldo_nuevo);
+
+        if(this.tipo_movimiento.id === 1){
+
+            saldo_nuevo = saldo_antiguo - monto_antiguo;
+            saldo_nuevo = saldo_nuevo + monto_nuevo;
+
+            console.log("saldo_nuevo : " + saldo_nuevo);
+        }
+        else{
+            saldo_nuevo = saldo_antiguo + monto_antiguo;
+            saldo_nuevo = saldo_nuevo - monto_nuevo;
+
+            console.log("saldo_nuevo : " + saldo_nuevo);
+
+            this.monto = "-" + this.monto;
+
+            console.log("monto : " + this.monto);
+        }
+
+        saldo_final = String(saldo_nuevo);
+
+        console.log("saldo_final : " + saldo_final);
+
+        console.log("entrada : " + this.cuenta_consultada.id + " | " +saldo_final);
+
+        await this.DBService.updateMontoCuentas(this.cuenta_consultada.id, saldo_final);
     }
 
-    actualizarMovimiento(){
-        this.DBService.updateMovimiento(this.id, this.descripcion, this.monto, this.id_cuenta, this.id_tipo_movimiento);
+    async actualizarMovimiento() {
+
+        this.actualizarSaldoCuenta();
+
+        console.log(this.id + "|" +  this.descripcion + "|" +  this.monto + "|" +  this.cuenta_consultada.id)
+
+        this.DBService.updateMovimiento(this.id, this.descripcion, this.monto, this.cuenta_consultada.id);
 
         this.DBService.presentToast("Movimiento actualizado");
 

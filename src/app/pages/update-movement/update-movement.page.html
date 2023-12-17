@@ -30,28 +30,13 @@
 
         <ion-row>
             <ion-col>
-                <mat-form-field>
-                    <mat-label>Cuenta</mat-label>
-                    <mat-select>
-                        <mat-option *ngFor="let cuenta of arreglo_cuentas" [value]="cuenta.id"
-                            (click)="setCuenta(cuenta)">
-                            {{cuenta.nombre}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <mat-label>Cuenta: {{cuenta_consultada.nombre}}</mat-label>
             </ion-col>
         </ion-row>
 
         <ion-row>
             <ion-col>
-                <mat-form-field>
-                    <mat-label>Tipo de movimiento</mat-label>
-                    <mat-select>
-                        <mat-option *ngFor="let tipo of tipos_movimiento" [value]="tipo.id" (click)="setTipoCuenta(tipo)">
-                            {{tipo.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <mat-label>Tipo de movimiento: {{tipo_movimiento.descripcion}}</mat-label>
             </ion-col>
         </ion-row>
 

@@ -39,6 +39,8 @@ export class MovementsPage implements OnInit {
         this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
 
         this.cuenta_consultada = JSON.parse(localStorage.getItem("cuenta_consultada") || '{}');
+
+        localStorage.removeItem('movement_info');
     }
 
     ngOnInit() {
@@ -67,7 +69,18 @@ export class MovementsPage implements OnInit {
 
     goUpdateMovement(movimiento: any){
 
-        let navigationExtras: NavigationExtras = {
+        let movement_info_to_update: any = {
+            id: movimiento.id,
+            descripcion: movimiento.descripcion,
+            monto: movimiento.monto,
+            id_cuenta: movimiento.id_cuenta,
+            nombre_cuenta: this.cuenta_consultada.nombre,
+            id_tipo_movimiento: movimiento.id_tipo_movimiento
+        }
+
+        localStorage.setItem('movement_info', JSON.stringify(movement_info_to_update));
+
+/*         let navigationExtras: NavigationExtras = {
             state: {
                 idEnv: movimiento.id,
                 descripcionEnv: movimiento.descripcion,
@@ -75,14 +88,32 @@ export class MovementsPage implements OnInit {
                 id_cuentaEnv: movimiento.id_cuenta,
                 id_tipo_movimientoEnv: movimiento.id_tipo_movimiento,
             }
-        }
+        } */
 
-        this.router.navigate(['/update-movement'] , navigationExtras);
+        this.router.navigate(['/update-movement'] /* , navigationExtras */);
+    }
+
+    actualizarSaldoCuenta(movimiento: any){
+
+        let monto_eliminado = parseInt(movimiento.monto);
+
+        let saldo_antiguo = parseInt(this.cuenta_consultada.saldo);
+        let saldo_nuevo = 0;
+        let saldo_final = "";
+
+        saldo_nuevo = saldo_antiguo - (monto_eliminado);
+        console.log("saldo previo: " + saldo_nuevo);
+
+        saldo_final = String(saldo_nuevo);
+
+        console.log(String(saldo_nuevo));
+
+        this.DBService.updateMontoCuentas(this.cuenta_consultada.id, saldo_final);
     }
 
     goDeleteMovement(movimiento: any){
 
-        this.DBService.updateMontoCuentas(this.cuenta_consultada.id, String(this.cuenta_consultada.saldo - movimiento.monto));
+        this.actualizarSaldoCuenta(movimiento);
 
         this.DBService.deleteMovimiento(movimiento.id, movimiento.id_cuenta);
         this.DBService.presentToast("Movimiento Eliminado");
